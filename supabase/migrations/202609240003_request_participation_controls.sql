@@ -48,13 +48,13 @@ create index if not exists requests_participation_mode_idx on public.requests(pa
 
 alter table public.account_modules enable row level security;
 
-create policy if not exists "Users can read own account modules"
-  on public.account_modules for select
-  to authenticated
+drop policy if exists "Users can read own account modules" on public.account_modules;
+create policy "Users can read own account modules"
+  on public.account_modules for select to authenticated
   using (auth.uid() = user_id);
 
-create policy if not exists "Users can update own account modules"
-  on public.account_modules for update
-  to authenticated
+drop policy if exists "Users can update own account modules" on public.account_modules;
+create policy "Users can update own account modules"
+  on public.account_modules for update to authenticated
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
