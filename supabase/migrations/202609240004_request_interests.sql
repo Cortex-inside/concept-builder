@@ -13,7 +13,8 @@ create or replace function public.company_qualifies_for_request(p_request_id uui
 returns boolean
 language sql
 stable
-as $$
+set search_path = public, pg_temp
+as $
   select exists (
     select 1
     from public.requests r
