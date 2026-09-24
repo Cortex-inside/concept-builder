@@ -162,12 +162,7 @@ function Dashboard() {
             >
               <Menu className="h-5 w-5" />
             </button>
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#102a43] text-white">
-                <Building2 className="h-4 w-4" />
-              </div>
-              <span className="font-bold text-[#102a43]">Balcão</span>
-            </div>
+            <div className="w-8" />
             <button className="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm" aria-label="Notificações">
               <Bell className="h-5 w-5 text-slate-500" />
             </button>
@@ -198,10 +193,6 @@ function Dashboard() {
 
           <header className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">
-                <span className="h-2 w-2 rounded-full bg-[#0f766e]" />
-                Balcão virtual
-              </div>
               <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#102a43] sm:text-[38px]">
                 O seu espaço de negócio, {firstName}.
               </h1>
@@ -262,7 +253,7 @@ function Dashboard() {
                     </div>
                   </div>
                   <div className="mt-6 grid grid-cols-2 gap-3">
-                    <MiniStat label="Capacidades" value={`${activeModules}/2`} />
+                    <MiniStat label="Módulos activos" value={`${activeModules}/2`} />
                     <MiniStat label="Pedidos" value={String(requests.length)} />
                   </div>
                   <div className="mt-5">
@@ -346,9 +337,9 @@ function Dashboard() {
           <section className="mt-7">
             <div className="mb-4">
               <p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Módulos da conta</p>
-              <h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Comprar e vender, na mesma conta.</h2>
-              <p className="mt-1 max-w-2xl text-sm text-slate-500">
-                A sua conta é única. As capacidades comerciais são activadas conforme a sua actividade.
+              <h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Módulos para comprar e vender.</h2>
+              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">
+                A sua conta é única. Os módulos <strong>Comprar</strong> e <strong>Vender</strong> activam as funcionalidades necessárias para cada lado da sua actividade comercial.
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
@@ -375,7 +366,7 @@ function Dashboard() {
 
           <section className="mt-7 grid gap-4 sm:grid-cols-3">
             <Metric label="Pedidos publicados" value={String(requests.length)} icon={<ShoppingBag />} />
-            <Metric label="Capacidades activas" value={String(activeModules)} icon={<CheckCircle2 />} />
+            <Metric label="Módulos activos" value={String(activeModules)} icon={<CheckCircle2 />} />
             <Metric label="Estado da conta" value="Activa" icon={<CircleUserRound />} />
           </section>
 
