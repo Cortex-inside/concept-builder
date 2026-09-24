@@ -178,8 +178,8 @@ button, a { transition: all .18s ease; }
 .text-blue-700, .text-blue-600 { color: var(--cb-teal-dark) !important; }
 .text-blue-50 { color: #e8f5f3 !important; }
 .border-blue-300 { border-color: #86cfc7 !important; }
-.hover\\:bg-blue-50:hover { background-color: var(--cb-teal-soft) !important; }
-.hover\\:border-blue-300:hover { border-color: #86cfc7 !important; }
+.hover\:bg-blue-50:hover { background-color: var(--cb-teal-soft) !important; }
+.hover\:border-blue-300:hover { border-color: #86cfc7 !important; }
 .bg-gradient-to-br.from-blue-700.via-blue-600.to-cyan-600 {
   background: linear-gradient(135deg, #102a43 0%, #164e63 48%, #0f766e 100%) !important;
 }
