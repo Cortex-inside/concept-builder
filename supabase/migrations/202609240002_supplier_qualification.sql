@@ -1,3 +1,16 @@
+create table if not exists public.account_modules (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  buying_enabled boolean not null default false,
+  selling_enabled boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table public.account_modules enable row level security;
+drop policy if exists "Users can read own modules" on public.account_modules;
+create policy "Users can read own modules" on public.account_modules for select to authenticated using (auth.uid()=user_id);
+drop policy if exists "Users can update own modules" on public.account_modules;
+create policy "Users can update own modules" on public.account_modules for update to authenticated using (auth.uid()=user_id) with check (auth.uid()=user_id);
+
 alter table public.companies
   add column if not exists completed_projects integer not null default 0,
   add column if not exists certifications text[] not null default '{}',
