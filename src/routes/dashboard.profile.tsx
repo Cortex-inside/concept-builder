@@ -23,10 +23,12 @@ function Profile() {
   const [foundedYear, setFoundedYear] = useState("");
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) return;
+      setEmail(data.user.email ?? "");
       supabase
         .from("companies")
         .select("*")
@@ -138,7 +140,7 @@ function Profile() {
             <label className="field-label">Morada<input value={address} onChange={(event) => setAddress(event.target.value)} className="field" /></label>
             <label className="field-label">Website<input type="url" value={website} onChange={(event) => setWebsite(event.target.value)} placeholder="https://" className="field" /></label>
             <label className="field-label">WhatsApp<input value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} className="field" /></label>
-            <label className="field-label">Email<input type="email" value={""} readOnly className="field bg-slate-50" /></label>
+            <label className="field-label">Email da conta<input type="email" value={email} readOnly className="field bg-slate-50" /></label>
             <label className="field-label">Dimensão<input value={employees} onChange={(event) => setEmployees(event.target.value)} placeholder="Ex.: 11–50 colaboradores" className="field" /></label>
           </div>
         </section>
