@@ -14,13 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_modules: {
+        Row: {
+          buying_enabled: boolean
+          created_at: string
+          selling_enabled: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          buying_enabled?: boolean
+          created_at?: string
+          selling_enabled?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          buying_enabled?: boolean
+          created_at?: string
+          selling_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           address: string | null
-          bairro: string | null
           city: string | null
           created_at: string
-          description: string | null
+          description: string
           district: string | null
           email: string | null
           employees: string | null
@@ -29,30 +52,29 @@ export type Database = {
           id: string
           name: string
           nuit: string | null
-          owner_id: string | null
+          owner_id: string
           phone: string | null
-          plan: string
           province: string
-          search: unknown
-          sector_id: number | null
+          sector: string
           served_provinces: string[]
           services: string[]
-          slug: string
+          slug: string | null
           trade_name: string | null
           updated_at: string
-          verif_company: boolean
-          verif_contact: boolean
-          verif_experience: boolean
-          verif_service: boolean
+          verification_notes: string | null
+          verification_reviewed_at: string | null
+          verification_reviewed_by: string | null
+          verification_status: string
+          verification_submitted_at: string | null
+          verified: boolean
           website: string | null
           whatsapp: string | null
         }
         Insert: {
           address?: string | null
-          bairro?: string | null
           city?: string | null
           created_at?: string
-          description?: string | null
+          description: string
           district?: string | null
           email?: string | null
           employees?: string | null
@@ -61,30 +83,29 @@ export type Database = {
           id?: string
           name: string
           nuit?: string | null
-          owner_id?: string | null
+          owner_id: string
           phone?: string | null
-          plan?: string
-          province?: string
-          search?: unknown
-          sector_id?: number | null
+          province: string
+          sector: string
           served_provinces?: string[]
           services?: string[]
-          slug: string
+          slug?: string | null
           trade_name?: string | null
           updated_at?: string
-          verif_company?: boolean
-          verif_contact?: boolean
-          verif_experience?: boolean
-          verif_service?: boolean
+          verification_notes?: string | null
+          verification_reviewed_at?: string | null
+          verification_reviewed_by?: string | null
+          verification_status?: string
+          verification_submitted_at?: string | null
+          verified?: boolean
           website?: string | null
           whatsapp?: string | null
         }
         Update: {
           address?: string | null
-          bairro?: string | null
           city?: string | null
           created_at?: string
-          description?: string | null
+          description?: string
           district?: string | null
           email?: string | null
           employees?: string | null
@@ -93,56 +114,63 @@ export type Database = {
           id?: string
           name?: string
           nuit?: string | null
-          owner_id?: string | null
+          owner_id?: string
           phone?: string | null
-          plan?: string
           province?: string
-          search?: unknown
-          sector_id?: number | null
+          sector?: string
           served_provinces?: string[]
           services?: string[]
-          slug?: string
+          slug?: string | null
           trade_name?: string | null
           updated_at?: string
-          verif_company?: boolean
-          verif_contact?: boolean
-          verif_experience?: boolean
-          verif_service?: boolean
+          verification_notes?: string | null
+          verification_reviewed_at?: string | null
+          verification_reviewed_by?: string | null
+          verification_status?: string
+          verification_submitted_at?: string | null
+          verified?: boolean
           website?: string | null
           whatsapp?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "companies_sector_id_fkey"
-            columns: ["sector_id"]
-            isOneToOne: false
-            referencedRelation: "sectors"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      company_events: {
+      company_verification_documents: {
         Row: {
           company_id: string
-          created_at: string
-          id: number
-          type: string
+          document_type: string
+          id: string
+          notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          storage_path: string
+          submitted_at: string
         }
         Insert: {
           company_id: string
-          created_at?: string
-          id?: number
-          type: string
+          document_type: string
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          storage_path: string
+          submitted_at?: string
         }
         Update: {
           company_id?: string
-          created_at?: string
-          id?: number
-          type?: string
+          document_type?: string
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          storage_path?: string
+          submitted_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "company_events_company_id_fkey"
+            foreignKeyName: "company_verification_documents_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -150,40 +178,43 @@ export type Database = {
           },
         ]
       }
-      portfolio_items: {
+      company_verifications: {
         Row: {
-          category: string | null
-          client: string | null
           company_id: string
           created_at: string
-          description: string | null
+          document_count: number
           id: string
-          title: string
-          year: number | null
+          notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          submitted_at: string
         }
         Insert: {
-          category?: string | null
-          client?: string | null
           company_id: string
           created_at?: string
-          description?: string | null
+          document_count?: number
           id?: string
-          title: string
-          year?: number | null
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status: string
+          submitted_at?: string
         }
         Update: {
-          category?: string | null
-          client?: string | null
           company_id?: string
           created_at?: string
-          description?: string | null
+          document_count?: number
           id?: string
-          title?: string
-          year?: number | null
+          notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          submitted_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "portfolio_items_company_id_fkey"
+            foreignKeyName: "company_verifications_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -197,72 +228,104 @@ export type Database = {
           full_name: string | null
           id: string
           phone: string | null
+          preferred_language: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
           full_name?: string | null
           id: string
           phone?: string | null
+          preferred_language?: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
           full_name?: string | null
           id?: string
           phone?: string | null
+          preferred_language?: string
+          updated_at?: string
         }
         Relationships: []
       }
-      proposals: {
+      proposal_invitations: {
         Row: {
-          company_id: string
           created_at: string
-          currency: string
-          delivery_time: string | null
           id: string
-          notes: string | null
-          payment_terms: string | null
-          price: number | null
           request_id: string
           status: string
-          validity_date: string | null
-          warranty: string | null
+          supplier_id: string
         }
         Insert: {
-          company_id: string
           created_at?: string
-          currency?: string
-          delivery_time?: string | null
           id?: string
-          notes?: string | null
-          payment_terms?: string | null
-          price?: number | null
           request_id: string
           status?: string
-          validity_date?: string | null
-          warranty?: string | null
+          supplier_id: string
         }
         Update: {
-          company_id?: string
           created_at?: string
-          currency?: string
-          delivery_time?: string | null
           id?: string
-          notes?: string | null
-          payment_terms?: string | null
-          price?: number | null
           request_id?: string
           status?: string
-          validity_date?: string | null
-          warranty?: string | null
+          supplier_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "proposals_company_id_fkey"
-            columns: ["company_id"]
+            foreignKeyName: "proposal_invitations_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_invitations_supplier_id_fkey"
+            columns: ["supplier_id"]
             isOneToOne: false
             referencedRelation: "companies"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      proposals: {
+        Row: {
+          amount: number | null
+          created_at: string
+          currency: string
+          delivery_days: number | null
+          id: string
+          notes: string | null
+          request_id: string
+          status: string
+          supplier_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          currency?: string
+          delivery_days?: number | null
+          id?: string
+          notes?: string | null
+          request_id: string
+          status?: string
+          supplier_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          currency?: string
+          delivery_days?: number | null
+          id?: string
+          notes?: string | null
+          request_id?: string
+          status?: string
+          supplier_id?: string
+          updated_at?: string
+        }
+        Relationships: [
           {
             foreignKeyName: "proposals_request_id_fkey"
             columns: ["request_id"]
@@ -270,188 +333,71 @@ export type Database = {
             referencedRelation: "requests"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "proposals_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
         ]
       }
       requests: {
         Row: {
           budget: string | null
-          buyer_company: string | null
-          buyer_id: string
-          city: string | null
-          company_size: string | null
           created_at: string
-          deadline: string | null
-          description: string | null
+          description: string
           id: string
-          province: string | null
-          quantity: string | null
-          sector_id: number | null
-          service: string | null
+          owner_id: string
+          province: string
+          sector: string
           status: string
           title: string
+          updated_at: string
         }
         Insert: {
           budget?: string | null
-          buyer_company?: string | null
-          buyer_id: string
-          city?: string | null
-          company_size?: string | null
           created_at?: string
-          deadline?: string | null
-          description?: string | null
+          description: string
           id?: string
-          province?: string | null
-          quantity?: string | null
-          sector_id?: number | null
-          service?: string | null
+          owner_id: string
+          province: string
+          sector: string
           status?: string
           title: string
+          updated_at?: string
         }
         Update: {
           budget?: string | null
-          buyer_company?: string | null
-          buyer_id?: string
-          city?: string | null
-          company_size?: string | null
           created_at?: string
-          deadline?: string | null
-          description?: string | null
+          description?: string
           id?: string
-          province?: string | null
-          quantity?: string | null
-          sector_id?: number | null
-          service?: string | null
+          owner_id?: string
+          province?: string
+          sector?: string
           status?: string
           title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "requests_sector_id_fkey"
-            columns: ["sector_id"]
-            isOneToOne: false
-            referencedRelation: "sectors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      reviews: {
-        Row: {
-          author_id: string
-          author_name: string | null
-          comment: string | null
-          company_id: string
-          created_at: string
-          id: string
-          rating: number
-        }
-        Insert: {
-          author_id: string
-          author_name?: string | null
-          comment?: string | null
-          company_id: string
-          created_at?: string
-          id?: string
-          rating: number
-        }
-        Update: {
-          author_id?: string
-          author_name?: string | null
-          comment?: string | null
-          company_id?: string
-          created_at?: string
-          id?: string
-          rating?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reviews_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      rfq_invitations: {
-        Row: {
-          company_id: string
-          created_at: string
-          id: string
-          match_score: number
-          message: string | null
-          request_id: string
-          status: string
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          id?: string
-          match_score?: number
-          message?: string | null
-          request_id: string
-          status?: string
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          id?: string
-          match_score?: number
-          message?: string | null
-          request_id?: string
-          status?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "rfq_invitations_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "rfq_invitations_request_id_fkey"
-            columns: ["request_id"]
-            isOneToOne: false
-            referencedRelation: "requests"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      sectors: {
-        Row: {
-          id: number
-          name_en: string
-          name_pt: string
-          slug: string
-        }
-        Insert: {
-          id?: number
-          name_en: string
-          name_pt: string
-          slug: string
-        }
-        Update: {
-          id?: number
-          name_en?: string
-          name_pt?: string
-          slug?: string
+          updated_at?: string
         }
         Relationships: []
       }
       user_roles: {
         Row: {
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
+          created_at: string
+          role: string
+          updated_at: string
           user_id: string
         }
         Insert: {
-          id?: string
-          role: Database["public"]["Enums"]["app_role"]
+          created_at?: string
+          role: string
+          updated_at?: string
           user_id: string
         }
         Update: {
-          id?: string
-          role?: Database["public"]["Enums"]["app_role"]
+          created_at?: string
+          role?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -461,19 +407,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
-      is_company_owner: { Args: { _company: string }; Returns: boolean }
-      is_invited_owner: { Args: { _req: string }; Returns: boolean }
-      is_request_buyer: { Args: { _req: string }; Returns: boolean }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -600,8 +537,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["admin", "moderator", "user"],
-    },
+    Enums: {},
   },
 } as const
