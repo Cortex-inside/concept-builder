@@ -20,14 +20,24 @@ function Register() {
     setError("");
     setMessage("");
     setLoading(true);
-    const { data, error: signUpError } = await supabase.auth.signUp({ email, password, options: { data: { company_name: companyName, full_name: fullName, phone } } });
-    if (signUpError) { setLoading(false); return setError(signUpError.message); }
-    if (data.session) {
-      nav({ to: "/dashboard/profile" });
-      return;
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: email.trim().toLowerCase(),
+        password,
+        options: { data: { company_name: companyName.trim(), full_name: fullName.trim(), phone: phone.trim() } },
+      });
+      if (signUpError) return setError(signUpError.message);
+      if (data.session) {
+        await nav({ to: "/dashboard/profile" });
+        return;
+      }
+      setMessage("Conta criada. Confirme o email, se solicitado, e depois entre na sua conta.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Não foi possível criar a conta. Verifique a configuração do Supabase.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    setMessage("Conta criada. Confirme o email, se solicitado, e depois entre na sua conta.");
+
   }
 
   return <main className="mx-auto max-w-2xl px-4 py-12"><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
