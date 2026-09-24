@@ -1,24 +1,49 @@
 # Concept Builder
 
-considere o conceito em anexo e monte o sistema
+Marketplace B2B para empresas e fornecedores em Moçambique.
 
-This project was built with [Lovable](https://lovable.dev).
+## Estado atual
 
-## Build with Lovable
+A aplicação já inclui:
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/95f2c013-3de4-419d-86ef-76b83e77c612).
+- Homepage com pesquisa e secção “O que precisa?”
+- Diretório com filtros por sector, província e verificação
+- Perfis individuais de empresas
+- Login e registo de conta em modo demonstração
+- Painel da empresa e edição de perfil
+- Criação de pedidos e fornecedores compatíveis
+- Convites e submissão de propostas
+- Comparação de propostas
+- Planos
+- Português / English
+- Navegação responsiva
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Os dados desta primeira versão são demonstrativos e persistidos localmente no navegador. A integração com Supabase será feita numa fase seguinte.
 
-## Development
+## Desenvolvimento local
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+```bash
+npm install
 npm run dev
 ```
+
+Build de produção:
+
+```bash
+npm run build
+```
+
+## Publicação
+
+O projeto está configurado para **Vercel + TanStack Start**. O ficheiro `vercel.json` permite que a Vercel reconheça explicitamente o framework.
+
+1. Entre na Vercel.
+2. Importe o repositório `Cortex-inside/concept-builder`.
+3. Mantenha a configuração de build detetada automaticamente.
+4. Faça o deploy.
+
+A Vercel criará uma URL pública e deployments de preview para os commits seguintes.
+
+## Próxima fase
+
+Depois de validar visualmente a aplicação publicada, avançaremos para a integração real de autenticação, empresas, pedidos e propostas com Supabase.
