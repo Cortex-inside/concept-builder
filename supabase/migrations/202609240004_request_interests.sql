@@ -25,7 +25,7 @@ as $function$
       and (r.min_completed_projects is null or c.completed_projects >= r.min_completed_projects)
       and (cardinality(r.required_certifications)=0 or r.required_certifications <@ c.certifications)
   );
-$$;
+$function$;
 
 create index if not exists request_interests_request_idx on public.request_interests(request_id);
 create index if not exists request_interests_supplier_idx on public.request_interests(supplier_id);
