@@ -14,16 +14,466 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      companies: {
+        Row: {
+          address: string | null
+          bairro: string | null
+          city: string | null
+          created_at: string
+          description: string | null
+          district: string | null
+          email: string | null
+          employees: string | null
+          entity_type: string | null
+          founded_year: number | null
+          id: string
+          name: string
+          nuit: string | null
+          owner_id: string | null
+          phone: string | null
+          plan: string
+          province: string
+          search: unknown
+          sector_id: number | null
+          served_provinces: string[]
+          services: string[]
+          slug: string
+          trade_name: string | null
+          updated_at: string
+          verif_company: boolean
+          verif_contact: boolean
+          verif_experience: boolean
+          verif_service: boolean
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          address?: string | null
+          bairro?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          district?: string | null
+          email?: string | null
+          employees?: string | null
+          entity_type?: string | null
+          founded_year?: number | null
+          id?: string
+          name: string
+          nuit?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          plan?: string
+          province?: string
+          search?: unknown
+          sector_id?: number | null
+          served_provinces?: string[]
+          services?: string[]
+          slug: string
+          trade_name?: string | null
+          updated_at?: string
+          verif_company?: boolean
+          verif_contact?: boolean
+          verif_experience?: boolean
+          verif_service?: boolean
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          address?: string | null
+          bairro?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          district?: string | null
+          email?: string | null
+          employees?: string | null
+          entity_type?: string | null
+          founded_year?: number | null
+          id?: string
+          name?: string
+          nuit?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          plan?: string
+          province?: string
+          search?: unknown
+          sector_id?: number | null
+          served_provinces?: string[]
+          services?: string[]
+          slug?: string
+          trade_name?: string | null
+          updated_at?: string
+          verif_company?: boolean
+          verif_contact?: boolean
+          verif_experience?: boolean
+          verif_service?: boolean
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_events: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: number
+          type: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: number
+          type: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: number
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portfolio_items: {
+        Row: {
+          category: string | null
+          client: string | null
+          company_id: string
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+          year: number | null
+        }
+        Insert: {
+          category?: string | null
+          client?: string | null
+          company_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+          year?: number | null
+        }
+        Update: {
+          category?: string | null
+          client?: string | null
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      proposals: {
+        Row: {
+          company_id: string
+          created_at: string
+          currency: string
+          delivery_time: string | null
+          id: string
+          notes: string | null
+          payment_terms: string | null
+          price: number | null
+          request_id: string
+          status: string
+          validity_date: string | null
+          warranty: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          currency?: string
+          delivery_time?: string | null
+          id?: string
+          notes?: string | null
+          payment_terms?: string | null
+          price?: number | null
+          request_id: string
+          status?: string
+          validity_date?: string | null
+          warranty?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          currency?: string
+          delivery_time?: string | null
+          id?: string
+          notes?: string | null
+          payment_terms?: string | null
+          price?: number | null
+          request_id?: string
+          status?: string
+          validity_date?: string | null
+          warranty?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      requests: {
+        Row: {
+          budget: string | null
+          buyer_company: string | null
+          buyer_id: string
+          city: string | null
+          company_size: string | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          id: string
+          province: string | null
+          quantity: string | null
+          sector_id: number | null
+          service: string | null
+          status: string
+          title: string
+        }
+        Insert: {
+          budget?: string | null
+          buyer_company?: string | null
+          buyer_id: string
+          city?: string | null
+          company_size?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          province?: string | null
+          quantity?: string | null
+          sector_id?: number | null
+          service?: string | null
+          status?: string
+          title: string
+        }
+        Update: {
+          budget?: string | null
+          buyer_company?: string | null
+          buyer_id?: string
+          city?: string | null
+          company_size?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          province?: string | null
+          quantity?: string | null
+          sector_id?: number | null
+          service?: string | null
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "requests_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          author_id: string
+          author_name: string | null
+          comment: string | null
+          company_id: string
+          created_at: string
+          id: string
+          rating: number
+        }
+        Insert: {
+          author_id: string
+          author_name?: string | null
+          comment?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          rating: number
+        }
+        Update: {
+          author_id?: string
+          author_name?: string | null
+          comment?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rfq_invitations: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          match_score: number
+          message: string | null
+          request_id: string
+          status: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          match_score?: number
+          message?: string | null
+          request_id: string
+          status?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          match_score?: number
+          message?: string | null
+          request_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rfq_invitations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rfq_invitations_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sectors: {
+        Row: {
+          id: number
+          name_en: string
+          name_pt: string
+          slug: string
+        }
+        Insert: {
+          id?: number
+          name_en: string
+          name_pt: string
+          slug: string
+        }
+        Update: {
+          id?: number
+          name_en?: string
+          name_pt?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_company_owner: { Args: { _company: string }; Returns: boolean }
+      is_invited_owner: { Args: { _req: string }; Returns: boolean }
+      is_request_buyer: { Args: { _req: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +600,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
