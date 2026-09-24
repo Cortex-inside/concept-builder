@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { supabase } from "../lib/supabase";
 
 export const Route = createFileRoute("/register")({ component: Register });
@@ -7,7 +7,7 @@ export const Route = createFileRoute("/register")({ component: Register });
 function Register() {
   const [n, setN] = useState(""), [e, setE] = useState(""), [p, setP] = useState(""), [error, setError] = useState("");
   const nav = useNavigate();
-  async function submit(x: React.FormEvent) {
+  async function submit(x: FormEvent) {
     x.preventDefault(); setError("");
     const { error } = await supabase.auth.signUp({ email: e, password: p, options: { data: { company_name: n } } });
     if (error) return setError(error.message);
