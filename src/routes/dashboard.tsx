@@ -117,8 +117,6 @@ function Dashboard() {
 
   const activeModules =
     Number(modules.buying_enabled) + Number(modules.selling_enabled);
-  const activeAddons =
-    Number(modules.advanced_qualification_enabled) + Number(modules.supplier_invites_enabled);
   const firstName = fullName.trim().split(" ")[0] || "Utilizador";
 
   function runSearch() {
@@ -277,21 +275,8 @@ function Dashboard() {
                       <Building2 className="h-5 w-5" />
                     </div>
                   </div>
-                  <div className="mt-6 grid grid-cols-2 gap-3">
-                    <MiniStat label="Módulos activos" value={`${activeModules}/2`} />
-                    <MiniStat label="Pedidos" value={String(requests.length)} />
-                  </div>
-                  <div className="mt-5">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-500">Ativação da conta</span>
-                      <span className="font-bold text-[#0f766e]">{activeModules * 50}%</span>
-                    </div>
-                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
-                      <div className="h-full rounded-full bg-[#0f766e] transition-all" style={{ width: `${activeModules * 50}%` }} />
-                    </div>
-                  </div>
                 </div>
-              </div>
+              </div>              </div>
             </div>
           </section>
 
@@ -388,36 +373,18 @@ function Dashboard() {
             </div>
           </section>
 
-          <section className="mt-7 grid gap-4 lg:grid-cols-[1fr_1fr_1fr_1.35fr]">
-            <Metric label="Pedidos publicados" value={String(requests.length)} icon={<ShoppingBag />} detail="Necessidades criadas" />
-            <Metric label="Módulos activos" value={`${activeModules}/2`} icon={<CheckCircle2 />} detail="Comprar e Vender" />
-            <Metric label="Add-ons activos" value={String(activeAddons)} icon={<Sparkles />} detail="Qualificação e convites" />
-            <div className="rounded-2xl border border-[#dfe6ed] bg-[#102a43] p-5 text-white shadow-sm">
-              <div className="flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wide text-slate-300">Próximo passo</span><Sparkles className="h-5 w-5 text-teal-300" /></div>
-              <p className="mt-3 text-sm font-extrabold">Complete o seu espaço comercial</p>
-              <p className="mt-1 text-xs leading-5 text-slate-300">Active os módulos que pretende usar e mantenha o perfil da empresa atualizado.</p>
-              <Link to="/dashboard/profile" className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-teal-200">Rever perfil <ArrowRight className="h-3.5 w-3.5" /></Link>
-            </div>
-          </section>
-
-          <section className="mt-7 grid gap-4 lg:grid-cols-[1.35fr_.65fr]">
-            <div className="rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
-              <div className="flex items-start justify-between gap-4">
-                <div><p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Saúde do perfil</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Confiança para fazer negócio.</h2><p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Mantenha a informação da empresa completa e a documentação de verificação actualizada.</p></div>
-                <ShieldCheck className="h-6 w-6 text-[#0f766e]" />
+          <section className="mt-7 rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Estado da empresa</p>
+                <h2 className="mt-1 text-lg font-extrabold text-[#102a43]">Mantenha a sua presença comercial pronta.</h2>
               </div>
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <StatusPill label="Perfil empresarial" value={companyName === "A sua empresa" ? "Por completar" : "Criado"} />
-                <StatusPill label="Verificação" value={companyVerification === "verified" ? "Verificada" : companyVerification === "pending" ? "Em análise" : "Por verificar"} />
-                <StatusPill label="Módulos" value={String(activeModules) + "/2 activos"} />
-              </div>
-              <div className="mt-5 flex flex-wrap gap-3"><Link to="/dashboard/profile" className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white">Completar empresa <ArrowRight className="h-4 w-4" /></Link><Link to="/dashboard/documents" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-[#102a43]"><FileCheck2 className="h-4 w-4 text-[#0f766e]" /> Ver documentação</Link></div>
+              <Link to="/dashboard/profile" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-[#102a43]">Gerir empresa <ArrowRight className="h-4 w-4" /></Link>
             </div>
-            <div className="rounded-2xl border border-[#dfe6ed] bg-gradient-to-br from-white to-[#eef7f5] p-5 shadow-sm sm:p-6">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]"><LockKeyhole className="h-5 w-5" /></div>
-              <h3 className="mt-4 text-lg font-extrabold text-[#102a43]">Mais controlo, menos ruído.</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-500">Use qualificação avançada para definir requisitos e convites a fornecedores para direccionar oportunidades.</p>
-              <Link to="/plans" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0b5f59]">Explorar planos <ArrowRight className="h-4 w-4" /></Link>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              <StatusPill label="Empresa" value={companyName === "A sua empresa" ? "Por completar" : "Perfil criado"} />
+              <StatusPill label="Verificação" value={companyVerification === "verified" ? "Verificada" : companyVerification === "pending" ? "Em análise" : "Por verificar"} />
+              <StatusPill label="Documentação" value="Consultar documentos" />
             </div>
           </section>
 
@@ -576,11 +543,3 @@ function Metric({ label, value, icon, detail }: { label: string; value: string; 
   );
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl bg-[#f6f8fb] p-3">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p>
-      <p className="mt-1 text-lg font-extrabold text-[#102a43]">{value}</p>
-    </div>
-  );
-}
