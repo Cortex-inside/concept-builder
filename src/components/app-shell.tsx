@@ -16,14 +16,21 @@ export function AppShell() {
     // Auth must never prevent public routes from rendering.
     // On Vercel the Supabase client may be unavailable until deployment
     // environment variables are configured; treat that as signed-out state.
-    supabase.auth.getSession()
-      .then(({ data }) => {
-        if (active) setSignedIn(Boolean(data.session));
-      })
-      .catch((error) => {
-        console.error("[Auth] Unable to restore session:", error);
-        if (active) setSignedIn(false);
-      });
+    try {
+      supabase.auth.getSession()
+        .then(({ data }) => {
+          if (active) setSignedIn(Boolean(data.session));
+        })
+        .catch((error) => {
+          console.error("[Auth] Unable to restore session:", error);
+          if (active) setSignedIn(false);
+        });
+    } catch (error) {
+      // Missing/misconfigured Supabase runtime configuration must not block
+      // public pages from rendering.
+      console.error("[Auth] Supabase is unavailable:", error);
+      setSignedIn(false);
+    }
 
     let listener: { subscription: { unsubscribe: () => void } } | undefined;
     try {
