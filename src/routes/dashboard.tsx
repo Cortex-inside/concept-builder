@@ -423,20 +423,50 @@ function ModuleCard({
   icon: ReactNode; title: string; description: string; enabled: boolean; onActivate: () => void; href: string; cta: string; tone: "teal" | "navy"; features: string[];
 }) {
   const accent = tone === "teal";
+
   return (
-    <div className="group relative overflow-hidden rounded-[24px] border border-[#dfe6ed] bg-white p-6 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#b9ddd8] hover:shadow-lg sm:p-7">
-      <div className={accent ? "absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#74cfc2]/15 blur-2xl" : "absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#102a43]/10 blur-2xl"} />
-      <div className="relative">
-        <div className="flex items-start justify-between gap-4">
-          <div className={accent ? "flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f5f3] text-[#0f766e]" : "flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf1f6] text-[#102a43]"}>{icon}</div>
-          <span className={enabled ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1.5 text-xs font-bold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1.5 text-xs font-bold text-amber-700"}>{enabled ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Clock3 className="h-3.5 w-3.5" />}{enabled ? "Activo" : "Disponível"}</span>
+    <div className="group rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#b9ddd8] hover:shadow-md sm:p-6">
+      <div className="flex items-start gap-4">
+        <div className={accent ? "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]" : "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#edf1f6] text-[#102a43]"}>
+          {icon}
         </div>
-        <div className="mt-6 flex items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.14em] text-slate-400">Módulo</p><h3 className="mt-1 text-2xl font-extrabold tracking-tight text-[#102a43]">{title}</h3></div><span className="text-xs font-bold text-slate-400">01 / 02</span></div>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500">{description}</p>
-        <div className="mt-5 grid gap-2 sm:grid-cols-3">{features.map((feature) => <div key={feature} className="rounded-xl bg-[#f6f8fb] px-3 py-2.5 text-xs font-semibold leading-5 text-slate-600"><CheckCircle2 className="mb-1 h-3.5 w-3.5 text-[#0f766e]" />{feature}</div>)}</div>
-        <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-5">
-          {enabled ? <Link to={href as never} className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5f59]">{cta} <ArrowRight className="h-4 w-4" /></Link> : <button onClick={onActivate} className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#163a5f]">{cta} <ArrowRight className="h-4 w-4" /></button>}
-          <span className="text-xs text-slate-400">{enabled ? "Funcionalidades prontas a utilizar" : "Pode activar este módulo quando quiser"}</span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[.14em] text-slate-400">Módulo</p>
+              <h3 className="mt-0.5 text-xl font-extrabold tracking-tight text-[#102a43]">{title}</h3>
+            </div>
+            <span className={enabled ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700"}>
+              {enabled ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Clock3 className="h-3.5 w-3.5" />}
+              {enabled ? "Activo" : "Disponível"}
+            </span>
+          </div>
+
+          <p className="mt-2 max-w-xl text-sm leading-5 text-slate-500">{description}</p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {features.map((feature) => (
+              <span key={feature} className="inline-flex items-center gap-1.5 rounded-lg bg-[#f6f8fb] px-2.5 py-1.5 text-[11px] font-semibold text-slate-600">
+                <CheckCircle2 className="h-3 w-3 text-[#0f766e]" />
+                {feature}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
+            {enabled ? (
+              <Link to={href as never} className="inline-flex items-center gap-2 rounded-lg bg-[#0f766e] px-3.5 py-2 text-xs font-bold text-white transition hover:bg-[#0b5f59]">
+                {cta} <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            ) : (
+              <button onClick={onActivate} className="inline-flex items-center gap-2 rounded-lg bg-[#102a43] px-3.5 py-2 text-xs font-bold text-white transition hover:bg-[#163a5f]">
+                {cta} <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            )}
+            <span className="text-[11px] text-slate-400">
+              {enabled ? "Pronto a utilizar" : "Activação imediata"}
+            </span>
+          </div>
         </div>
       </div>
     </div>
