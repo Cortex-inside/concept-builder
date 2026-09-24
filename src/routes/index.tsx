@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building2, CheckCircle2, FileText, Search, Users } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, ChevronRight, FileText, Handshake, Search, ShieldCheck, TrendingUp, Users, WalletCards } from "lucide-react";
 import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -9,77 +9,105 @@ function Home() {
   const pt = lang === "pt";
 
   const steps = [
-    { Icon: FileText, title: pt ? "1. Publique" : "1. Publish", desc: pt ? "Descreva o que procura." : "Describe what you need." },
-    { Icon: Search, title: pt ? "2. Descubra" : "2. Discover", desc: pt ? "Receba fornecedores compatíveis." : "Receive compatible suppliers." },
-    { Icon: CheckCircle2, title: pt ? "3. Compare" : "3. Compare", desc: pt ? "Convide empresas e compare propostas." : "Invite companies and compare proposals." },
+    { n: "01", Icon: FileText, title: pt ? "Publique uma necessidade" : "Publish a requirement", desc: pt ? "Explique o que a sua empresa precisa, defina prazo, localização e orçamento." : "Describe what your business needs, including timing, location and budget." },
+    { n: "02", Icon: Search, title: pt ? "Encontre fornecedores" : "Find suppliers", desc: pt ? "Descubra empresas compatíveis e convide-as a participar." : "Discover compatible companies and invite them to participate." },
+    { n: "03", Icon: Handshake, title: pt ? "Compare e decida" : "Compare and decide", desc: pt ? "Receba propostas, compare condições e avance com o fornecedor certo." : "Receive proposals, compare terms and move forward with the right supplier." },
   ];
+
+  const benefits = [
+    { Icon: ShieldCheck, title: pt ? "Mais confiança nas compras" : "More confidence in procurement", text: pt ? "Informação empresarial estruturada e indicadores de verificação ajudam a reduzir incerteza." : "Structured business information and verification indicators help reduce uncertainty." },
+    { Icon: TrendingUp, title: pt ? "Mais oportunidades comerciais" : "More commercial opportunities", text: pt ? "Fornecedores apresentam serviços e respondem a oportunidades relevantes." : "Suppliers showcase services and respond to relevant opportunities." },
+    { Icon: WalletCards, title: pt ? "Processos mais organizados" : "More organized processes", text: pt ? "Pedidos, fornecedores e propostas ficam centralizados num único espaço." : "Requirements, suppliers and proposals stay organized in one place." },
+  ];
+
+  const sectors = pt
+    ? ["Construção e engenharia", "Tecnologia e serviços", "Consultoria", "Logística e transporte", "Indústria e fornecimento", "Energia e equipamentos"]
+    : ["Construction & engineering", "Technology & services", "Consulting", "Logistics & transport", "Industry & supply", "Energy & equipment"];
 
   return (
     <main>
-      <section className="bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-600 text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-20 md:grid-cols-[1.2fr_.8fr] md:items-center md:py-28">
-          <div>
-            <span className="rounded-full bg-white/15 px-3 py-1 text-sm">{pt ? "Marketplace B2B Moçambique" : "B2B Marketplace Mozambique"}</span>
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight md:text-6xl">
-              {pt ? "Encontre empresas. Crie oportunidades. Faça negócios." : "Find companies. Create opportunities. Do business."}
+      <section className="relative overflow-hidden bg-[#102a43] text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(15,118,110,.32),transparent_34%)]" />
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-[1.08fr_.92fr] lg:px-6 lg:py-24">
+          <div className="flex flex-col justify-center">
+            <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-bold uppercase tracking-[.12em] text-teal-100">
+              <BadgeCheck size={14} /> {pt ? "Marketplace B2B para Moçambique" : "B2B marketplace for Mozambique"}
+            </div>
+            <h1 className="max-w-3xl text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+              {pt ? "Transforme necessidades de negócio em oportunidades." : "Turn business needs into opportunities."}
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-blue-50">
-              {pt ? "Descubra fornecedores, publique necessidades e compare propostas numa única plataforma." : "Discover suppliers, publish needs and compare proposals in one platform."}
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
+              {pt ? "Encontre empresas, publique pedidos, receba propostas e construa relações comerciais — numa plataforma feita para o mercado B2B moçambicano." : "Find companies, publish requirements, receive proposals and build business relationships — in a platform designed for Mozambique's B2B market."}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/directory" className="rounded-xl bg-white px-5 py-3 font-semibold text-blue-700">
-                {pt ? "Explorar empresas" : "Explore companies"} <ArrowRight className="ml-1 inline" size={17} />
+              <Link to="/requests/new" className="rounded-lg bg-[#0f766e] px-5 py-3.5 text-sm font-bold text-white shadow-lg hover:bg-[#0b5f59]">
+                {pt ? "Publicar uma necessidade" : "Publish a requirement"} <ArrowRight className="ml-1 inline" size={17}/>
               </Link>
-              <Link to="/register" className="rounded-xl border border-white/40 px-5 py-3 font-semibold">
-                {pt ? "Criar conta" : "Create account"}
+              <Link to="/directory" className="rounded-lg border border-white/20 bg-white/5 px-5 py-3.5 text-sm font-bold text-white hover:bg-white/10">
+                {pt ? "Explorar empresas" : "Explore companies"}
               </Link>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-xs font-medium text-slate-300">
+              <span className="flex items-center gap-2"><CheckCircle2 size={15} className="text-teal-300"/> {pt ? "Perfis empresariais" : "Business profiles"}</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={15} className="text-teal-300"/> {pt ? "Pedidos e propostas" : "Requirements & proposals"}</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={15} className="text-teal-300"/> {pt ? "Mercado moçambicano" : "Mozambican market"}</span>
             </div>
           </div>
 
-          <div className="rounded-3xl bg-white p-6 text-slate-900 shadow-2xl">
-            <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-blue-50 p-3 text-blue-700"><Search /></div>
-              <div>
-                <h2 className="font-bold">{pt ? "O que precisa?" : "What do you need?"}</h2>
-                <p className="text-sm text-slate-500">{pt ? "Descreva a necessidade e encontre fornecedores compatíveis." : "Describe your need and find compatible suppliers."}</p>
+          <div className="relative">
+            <div className="rounded-2xl border border-white/15 bg-white p-5 text-[#102a43] shadow-2xl sm:p-6">
+              <div className="flex items-start gap-3 border-b border-slate-100 pb-5">
+                <div className="grid h-11 w-11 place-items-center rounded-lg bg-[#e8f5f3] text-[#0f766e]"><Search size={20}/></div>
+                <div><p className="text-xs font-bold uppercase tracking-wider text-[#0f766e]">{pt ? "Comece aqui" : "Start here"}</p><h2 className="mt-1 text-xl font-bold">{pt ? "O que precisa?" : "What do you need?"}</h2><p className="mt-1 text-sm text-slate-500">{pt ? "Encontre empresas capazes de responder." : "Find companies that can respond."}</p></div>
+              </div>
+              <div className="mt-5 space-y-2">
+                {(pt ? ["Preciso de um fornecedor", "Procuro um serviço profissional", "Quero comprar produtos ou materiais", "Quero encontrar novos clientes"] : ["I need a supplier", "I need a professional service", "I want to buy products or materials", "I want to find new customers"]).map(item =>
+                  <Link key={item} to="/requests/new" className="flex items-center justify-between rounded-lg border border-slate-200 p-3.5 text-sm font-semibold text-slate-700 hover:border-[#86cfc7] hover:bg-[#e8f5f3]">
+                    {item}<ChevronRight size={17} className="text-[#0f766e]"/>
+                  </Link>
+                )}
+              </div>
+              <div className="mt-5 rounded-lg bg-[#fbf4e5] p-3 text-xs leading-5 text-[#765017]">
+                {pt ? "Uma plataforma para aproximar quem procura de quem pode fornecer." : "A platform connecting businesses that need with businesses that can supply."}
               </div>
             </div>
-            <div className="mt-5 space-y-3">
-              {[
-                pt ? "Fornecedor de serviços" : "Service provider",
-                pt ? "Produtos e materiais" : "Products and materials",
-                pt ? "Consultoria" : "Consulting",
-                pt ? "Tecnologia" : "Technology",
-              ].map((item) => (
-                <Link key={item} to="/requests/new" className="flex items-center justify-between rounded-xl border p-4 hover:border-blue-300 hover:bg-blue-50">
-                  <span>{item}</span><ArrowRight size={17} />
-                </Link>
-              ))}
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <p className="text-sm font-bold uppercase tracking-widest text-blue-600">{pt ? "Como funciona" : "How it works"}</p>
-        <h2 className="mt-2 text-3xl font-bold">{pt ? "Do pedido à proposta em poucos passos" : "From request to proposal in a few steps"}</h2>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {steps.map(({ Icon, title, desc }) => (
-            <div key={title} className="rounded-2xl border bg-white p-6">
-              <Icon className="text-blue-600" />
-              <h3 className="mt-4 font-bold">{title}</h3>
-              <p className="mt-2 text-sm text-slate-600">{desc}</p>
-            </div>
-          ))}
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:grid-cols-3 lg:px-6">
+          {(pt ? [["01","Procure","Encontre empresas e serviços"],["02","Publique","Descreva uma necessidade"],["03","Compare","Avalie propostas e condições"]] : [["01","Search","Find companies and services"],["02","Publish","Describe a requirement"],["03","Compare","Evaluate proposals and terms"]]).map(([n,t,d]) =>
+            <div key={n} className="flex gap-4"><span className="text-sm font-extrabold text-[#0f766e]">{n}</span><div><p className="font-bold text-[#102a43]">{t}</p><p className="mt-1 text-sm text-slate-500">{d}</p></div></div>
+          )}
         </div>
       </section>
 
-      <section className="border-y bg-white">
-        <div className="mx-auto grid max-w-7xl gap-4 px-4 py-14 md:grid-cols-3">
-          <div className="rounded-2xl bg-slate-50 p-6"><Building2 className="text-blue-600" /><h3 className="mt-4 font-bold">{pt ? "Diretório empresarial" : "Business directory"}</h3><p className="mt-2 text-sm text-slate-600">{pt ? "Pesquise por sector, província e verificação." : "Search by sector, province and verification."}</p></div>
-          <div className="rounded-2xl bg-slate-50 p-6"><CheckCircle2 className="text-blue-600" /><h3 className="mt-4 font-bold">{pt ? "Perfis verificados" : "Verified profiles"}</h3><p className="mt-2 text-sm text-slate-600">{pt ? "Identifique empresas com informação verificada." : "Identify companies with verified information."}</p></div>
-          <div className="rounded-2xl bg-slate-50 p-6"><Users className="text-blue-600" /><h3 className="mt-4 font-bold">{pt ? "Rede B2B" : "B2B network"}</h3><p className="mt-2 text-sm text-slate-600">{pt ? "Crie relações comerciais num só lugar." : "Build business relationships in one place."}</p></div>
+      <section className="mx-auto max-w-7xl px-4 py-16 lg:px-6 lg:py-20">
+        <div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">{pt ? "Para compradores" : "For buyers"}</p><h2 className="mt-2 text-3xl font-bold tracking-tight text-[#102a43] sm:text-4xl">{pt ? "Torne o processo de compra empresarial mais simples." : "Make business procurement simpler."}</h2><p className="mt-4 leading-7 text-slate-600">{pt ? "Encontrar opções confiáveis e comparar propostas pode consumir tempo. O Concept Builder organiza esse processo." : "Finding reliable options and comparing proposals takes time. Concept Builder organizes that process."}</p></div>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">{benefits.map(({Icon,title,text}) => <article key={title} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"><div className="grid h-10 w-10 place-items-center rounded-lg bg-[#e8f5f3] text-[#0f766e]"><Icon size={20}/></div><h3 className="mt-5 font-bold text-[#102a43]">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></article>)}</div>
+      </section>
+
+      <section className="bg-[#f0f4f8]">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 lg:grid-cols-[.8fr_1.2fr] lg:px-6">
+          <div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">{pt ? "Para fornecedores" : "For suppliers"}</p><h2 className="mt-2 text-3xl font-bold tracking-tight text-[#102a43]">{pt ? "Esteja onde as empresas procuram." : "Be where businesses are looking."}</h2><p className="mt-4 leading-7 text-slate-600">{pt ? "Apresente a sua empresa, mostre os seus serviços e responda a pedidos relevantes para criar oportunidades comerciais mais qualificadas." : "Present your company, showcase your services and respond to relevant requirements to create more qualified opportunities."}</p><Link to="/register" className="mt-6 inline-flex items-center rounded-lg bg-[#102a43] px-5 py-3 text-sm font-bold text-white hover:bg-[#163a5f]">{pt ? "Registar empresa" : "Register company"} <ArrowRight className="ml-2" size={16}/></Link></div>
+          <div className="grid gap-3 sm:grid-cols-2">{sectors.map((s,i) => <div key={s} className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-4"><span className="grid h-9 w-9 place-items-center rounded-md bg-[#fbf4e5] text-xs font-bold text-[#765017]">0{i+1}</span><span className="text-sm font-semibold text-[#102a43]">{s}</span></div>)}</div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 lg:px-6 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div className="rounded-2xl bg-[#102a43] p-8 text-white sm:p-10"><p className="text-xs font-bold uppercase tracking-[.16em] text-teal-200">{pt ? "Como funciona" : "How it works"}</p><h2 className="mt-3 text-3xl font-bold">{pt ? "Da necessidade ao negócio." : "From requirement to business."}</h2><p className="mt-4 leading-7 text-slate-300">{pt ? "Um fluxo simples para reduzir pesquisa manual e dar estrutura à relação entre compradores e fornecedores." : "A simple flow to reduce manual searching and structure buyer-supplier relationships."}</p></div>
+          <div className="space-y-5">{steps.map(({n,Icon,title,desc}) => <div key={n} className="flex gap-4"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-slate-200 bg-white text-[#0f766e] shadow-sm"><Icon size={19}/></div><div><div className="flex items-center gap-2"><span className="text-xs font-bold text-[#0f766e]">{n}</span><h3 className="font-bold text-[#102a43]">{title}</h3></div><p className="mt-1 text-sm leading-6 text-slate-600">{desc}</p></div></div>)}</div>
+        </div>
+      </section>
+
+      <section className="border-y border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-14 text-center lg:px-6"><Users className="mx-auto text-[#0f766e]" size={25}/><h2 className="mt-4 text-2xl font-bold text-[#102a43]">{pt ? "Feito para relações comerciais de longo prazo" : "Built for long-term business relationships"}</h2><p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">{pt ? "O Concept Builder não é apenas um directório. É uma base para descobrir empresas, criar oportunidades e organizar processos comerciais." : "Concept Builder is more than a directory. It is a foundation to discover companies, create opportunities and organize commercial processes."}</p></div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-16 lg:px-6">
+        <div className="rounded-2xl bg-[#0f766e] px-6 py-10 text-white sm:px-10 sm:py-12 lg:flex lg:items-center lg:justify-between lg:gap-10"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-teal-100">{pt ? "Comece agora" : "Get started"}</p><h2 className="mt-2 text-3xl font-bold">{pt ? "Pronto para criar novas oportunidades?" : "Ready to create new opportunities?"}</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-teal-50">{pt ? "Procure empresas ou publique a sua primeira necessidade no Concept Builder." : "Find companies or publish your first requirement on Concept Builder."}</p></div><div className="mt-6 flex shrink-0 flex-wrap gap-3 lg:mt-0"><Link to="/directory" className="rounded-lg bg-white px-5 py-3 text-sm font-bold text-[#0b5f59]">{pt ? "Explorar empresas" : "Explore companies"}</Link><Link to="/register" className="rounded-lg border border-white/30 px-5 py-3 text-sm font-bold text-white hover:bg-white/10">{pt ? "Criar conta" : "Create account"}</Link></div></div>
       </section>
     </main>
   );
