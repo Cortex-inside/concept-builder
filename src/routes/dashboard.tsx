@@ -6,6 +6,9 @@ import {
   ShieldCheck,
   Sparkles,
   Building2,
+  BadgeCheck,
+  LockKeyhole,
+  UserPlus,
   CheckCircle2,
   ChevronRight,
   CircleUserRound,
@@ -32,6 +35,8 @@ export const Route = createFileRoute("/dashboard")({ component: Dashboard });
 type AccountModules = {
   buying_enabled: boolean;
   selling_enabled: boolean;
+  advanced_qualification_enabled: boolean;
+  supplier_invites_enabled: boolean;
 };
 
 function Dashboard() {
@@ -39,9 +44,12 @@ function Dashboard() {
   const [modules, setModules] = useState<AccountModules>({
     buying_enabled: false,
     selling_enabled: false,
+    advanced_qualification_enabled: false,
+    supplier_invites_enabled: false,
   });
   const [fullName, setFullName] = useState("Utilizador");
   const [companyName, setCompanyName] = useState("A sua empresa");
+  const [companyVerification, setCompanyVerification] = useState("unverified");
   const [mobileNav, setMobileNav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchSector, setSearchSector] = useState("");
@@ -66,7 +74,7 @@ function Dashboard() {
             .order("created_at", { ascending: false }),
           supabase
             .from("account_modules")
-            .select("buying_enabled, selling_enabled")
+            .select("buying_enabled, selling_enabled, advanced_qualification_enabled, supplier_invites_enabled")
             .eq("user_id", data.user.id)
             .maybeSingle(),
           supabase
@@ -76,7 +84,7 @@ function Dashboard() {
             .maybeSingle(),
           supabase
             .from("companies")
-            .select("name")
+            .select("id, name, verification_status")
             .eq("owner_id", data.user.id)
             .maybeSingle(),
         ]);
@@ -85,12 +93,13 @@ function Dashboard() {
       if (moduleResult.data) setModules(moduleResult.data);
       if (profileResult.data?.full_name) setFullName(profileResult.data.full_name);
       if (companyResult.data?.name) setCompanyName(companyResult.data.name);
+      if (companyResult.data?.verification_status) setCompanyVerification(companyResult.data.verification_status);
       if (!cancelled) return;
     });
     return () => { cancelled = true; };
   }, [navigate]);
 
-  async function activateModule(module: "buying_enabled" | "selling_enabled") {
+  async function activateModule(module: keyof AccountModules) {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) return;
 
@@ -108,6 +117,8 @@ function Dashboard() {
 
   const activeModules =
     Number(modules.buying_enabled) + Number(modules.selling_enabled);
+  const activeAddons =
+    Number(modules.advanced_qualification_enabled) + Number(modules.supplier_invites_enabled);
   const firstName = fullName.trim().split(" ")[0] || "Utilizador";
 
   function runSearch() {
@@ -362,15 +373,51 @@ function Dashboard() {
             </div>
           </section>
 
+          <section className="mt-7">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Módulos adicionais</p>
+                <h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Estruture a sua operação comercial.</h2>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">Funcionalidades opcionais para elevar a qualidade das oportunidades e controlar quem recebe convites.</p>
+              </div>
+              <Link to="/plans" className="hidden items-center gap-1 text-xs font-bold text-[#0b5f59] sm:inline-flex">Ver planos <ArrowRight className="h-3.5 w-3.5" /></Link>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <AddonCard icon={<BadgeCheck />} title="Qualificação avançada" description="Adicione critérios de experiência, projectos, certificações e verificação aos seus pedidos." enabled={modules.advanced_qualification_enabled} onActivate={() => activateModule("advanced_qualification_enabled")} href="/requests/new" cta={modules.advanced_qualification_enabled ? "Configurar qualificação" : "Activar qualificação"} features={["Critérios de experiência", "Projectos concluídos", "Certificações e verificação"]} />
+              <AddonCard icon={<UserPlus />} title="Convites a fornecedores" description="Convide empresas específicas para participar em oportunidades e mantenha maior controlo sobre a participação." enabled={modules.supplier_invites_enabled} onActivate={() => activateModule("supplier_invites_enabled")} href="/requests/new" cta={modules.supplier_invites_enabled ? "Gerir convites" : "Activar convites"} features={["Seleccionar fornecedores", "Convites direccionados", "Acompanhar respostas"]} />
+            </div>
+          </section>
+
           <section className="mt-7 grid gap-4 lg:grid-cols-[1fr_1fr_1fr_1.35fr]">
             <Metric label="Pedidos publicados" value={String(requests.length)} icon={<ShoppingBag />} detail="Necessidades criadas" />
             <Metric label="Módulos activos" value={`${activeModules}/2`} icon={<CheckCircle2 />} detail="Comprar e Vender" />
-            <Metric label="Estado da conta" value="Activa" icon={<ShieldCheck />} detail="Conta operacional" />
+            <Metric label="Add-ons activos" value={String(activeAddons)} icon={<Sparkles />} detail="Qualificação e convites" />
             <div className="rounded-2xl border border-[#dfe6ed] bg-[#102a43] p-5 text-white shadow-sm">
               <div className="flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wide text-slate-300">Próximo passo</span><Sparkles className="h-5 w-5 text-teal-300" /></div>
               <p className="mt-3 text-sm font-extrabold">Complete o seu espaço comercial</p>
               <p className="mt-1 text-xs leading-5 text-slate-300">Active os módulos que pretende usar e mantenha o perfil da empresa atualizado.</p>
               <Link to="/dashboard/profile" className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-teal-200">Rever perfil <ArrowRight className="h-3.5 w-3.5" /></Link>
+            </div>
+          </section>
+
+          <section className="mt-7 grid gap-4 lg:grid-cols-[1.35fr_.65fr]">
+            <div className="rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div><p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Saúde do perfil</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Confiança para fazer negócio.</h2><p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">Mantenha a informação da empresa completa e a documentação de verificação actualizada.</p></div>
+                <ShieldCheck className="h-6 w-6 text-[#0f766e]" />
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <StatusPill label="Perfil empresarial" value={companyName === "A sua empresa" ? "Por completar" : "Criado"} />
+                <StatusPill label="Verificação" value={companyVerification === "verified" ? "Verificada" : companyVerification === "pending" ? "Em análise" : "Por verificar"} />
+                <StatusPill label="Módulos" value={String(activeModules) + "/2 activos"} />
+              </div>
+              <div className="mt-5 flex flex-wrap gap-3"><Link to="/dashboard/profile" className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white">Completar empresa <ArrowRight className="h-4 w-4" /></Link><Link to="/dashboard/documents" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-[#102a43]"><FileCheck2 className="h-4 w-4 text-[#0f766e]" /> Ver documentação</Link></div>
+            </div>
+            <div className="rounded-2xl border border-[#dfe6ed] bg-gradient-to-br from-white to-[#eef7f5] p-5 shadow-sm sm:p-6">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]"><LockKeyhole className="h-5 w-5" /></div>
+              <h3 className="mt-4 text-lg font-extrabold text-[#102a43]">Mais controlo, menos ruído.</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-500">Use qualificação avançada para definir requisitos e convites a fornecedores para direccionar oportunidades.</p>
+              <Link to="/plans" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0b5f59]">Explorar planos <ArrowRight className="h-4 w-4" /></Link>
             </div>
           </section>
 
@@ -491,6 +538,32 @@ function ModuleCard({
       </div>
     </div>
   );
+}
+
+function AddonCard({
+  icon, title, description, enabled, onActivate, href, cta, features,
+}: {
+  icon: ReactNode; title: string; description: string; enabled: boolean; onActivate: () => void; href: string; cta: string; features: string[];
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm transition hover:border-[#b9ddd8] hover:shadow-md sm:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#f1f4f8] text-[#102a43]">{icon}</div>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">{enabled ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> : <LockKeyhole className="h-3.5 w-3.5" />}{enabled ? "Activo" : "Add-on"}</span>
+      </div>
+      <h3 className="mt-5 text-lg font-extrabold text-[#102a43]">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
+      <div className="mt-4 grid gap-2 sm:grid-cols-3">{features.map((feature) => <div key={feature} className="rounded-lg bg-[#f6f8fb] px-3 py-2 text-xs font-semibold text-slate-600">{feature}</div>)}</div>
+      <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
+        {enabled ? <Link to={href as never} className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white">{cta} <ArrowRight className="h-4 w-4" /></Link> : <button onClick={onActivate} className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white">{cta} <ArrowRight className="h-4 w-4" /></button>}
+        <span className="text-xs text-slate-400">{enabled ? "Disponível na sua conta" : "Activação opcional"}</span>
+      </div>
+    </div>
+  );
+}
+
+function StatusPill({ label, value }: { label: string; value: string }) {
+  return <div className="rounded-xl border border-slate-100 bg-[#f8fafc] p-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p><p className="mt-1 text-sm font-extrabold text-[#102a43]">{value}</p></div>;
 }
 
 function Metric({ label, value, icon, detail }: { label: string; value: string; icon: ReactNode; detail: string }) {
