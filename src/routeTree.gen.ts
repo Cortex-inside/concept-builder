@@ -60,6 +60,7 @@ export interface FileRoutesById {
  '/proposals': typeof ProposalsRoute
  '/proposals/$proposalId': typeof ProposalRoute
  '/plans': typeof PlansRoute
+ '/dashboard/documents': typeof DashboardDocumentsRoute
 }
 export interface FileRouteTypes {
  fileRoutesByFullPath: FileRoutesByFullPath
@@ -82,6 +83,7 @@ export interface RootRouteChildren {
  ProposalsRoute: typeof ProposalsRoute
  ProposalRoute: typeof ProposalRoute
  PlansRoute: typeof PlansRoute
+ DashboardDocumentsRoute: typeof DashboardDocumentsRoute
 }
 declare module '@tanstack/react-router' { interface FileRoutesByPath {
  '/': {id:'/';path:'/';fullPath:'/';preLoaderRoute:typeof IndexRouteImport;parentRoute:typeof rootRouteImport}
@@ -96,8 +98,9 @@ declare module '@tanstack/react-router' { interface FileRoutesByPath {
  '/proposals': {id:'/proposals';path:'/proposals';fullPath:'/proposals';preLoaderRoute:typeof ProposalsRouteImport;parentRoute:typeof rootRouteImport}
  '/proposals/$proposalId': {id:'/proposals/$proposalId';path:'/proposals/$proposalId';fullPath:'/proposals/$proposalId';preLoaderRoute:typeof ProposalRouteImport;parentRoute:typeof rootRouteImport}
  '/plans': {id:'/plans';path:'/plans';fullPath:'/plans';preLoaderRoute:typeof PlansRouteImport;parentRoute:typeof rootRouteImport}
+ '/dashboard/documents': {id:'/dashboard/documents';path:'/dashboard/documents';fullPath:'/dashboard/documents';preLoaderRoute:typeof DashboardDocumentsRouteImport;parentRoute:typeof rootRouteImport}
 }}
-const rootRouteChildren:RootRouteChildren={IndexRoute,DirectoryRoute,CompanyRoute,LoginRoute,RegisterRoute,DashboardRoute,ProfileRoute,RequestsRoute,NewRequestRoute,ProposalsRoute,ProposalRoute,PlansRoute}
+const rootRouteChildren:RootRouteChildren={IndexRoute,DirectoryRoute,CompanyRoute,LoginRoute,RegisterRoute,DashboardRoute,ProfileRoute,RequestsRoute,NewRequestRoute,ProposalsRoute,ProposalRoute,PlansRoute,DashboardDocumentsRoute}
 export const routeTree=rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
 import type { getRouter } from './router.tsx'
 import type { startInstance } from './start.ts'
