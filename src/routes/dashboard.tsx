@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Bell, Building2, CheckCircle2, ChevronRight, CircleUserRound,
-  FileText, LayoutDashboard, LogOut, Menu, PackageSearch, Plus, Settings,
+  FileText, LayoutDashboard, LogOut, Menu, PackageSearch, Plus, Search, Settings,
   ShoppingBag, Store, UserRound, X,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
@@ -94,15 +94,17 @@ function Dashboard() {
             </div>
           </header>
 
-          <section className="mt-7 overflow-hidden rounded-3xl bg-[#102a43] shadow-sm">
+          <section className="relative mt-7 overflow-hidden rounded-[30px] bg-[#102a43] shadow-xl">
+            <div className="absolute -right-20 -top-28 h-72 w-72 rounded-full bg-[#0f766e]/25 blur-2xl" />
+            <div className="absolute right-24 bottom-[-120px] h-64 w-64 rounded-full bg-[#c58a2a]/15 blur-3xl" />
             <div className="grid lg:grid-cols-[1.3fr_.7fr]">
               <div className="p-6 sm:p-8 lg:p-10">
-                <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold text-white/80">Painel empresarial</span>
-                <h2 className="mt-5 max-w-2xl text-2xl font-bold tracking-tight text-white sm:text-3xl">Uma conta para construir relações de negócio.</h2>
-                <p className="mt-3 max-w-xl text-sm leading-6 text-white/65">Ative as capacidades de que precisa e transforme necessidades em oportunidades comerciais.</p>
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/80"><span className="h-1.5 w-1.5 rounded-full bg-[#2dd4bf]" />Balcão empresarial</div>
+                <h2 className="mt-5 max-w-2xl text-2xl font-bold tracking-tight text-white sm:text-3xl">Tudo o que a sua empresa precisa para fazer negócio.</h2>
+                <p className="mt-3 max-w-xl text-sm leading-6 text-white/65">Pesquise empresas, publique necessidades, receba propostas e transforme contactos comerciais em relações de negócio — num único balcão.</p>
                 <div className="mt-7 flex flex-wrap gap-3">
-                  <Link to="/directory" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#102a43]">Explorar empresas <ArrowRight className="h-4 w-4" /></Link>
-                  <Link to="/plans" className="inline-flex items-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-sm font-semibold text-white">Ver planos</Link>
+                  <Link to="/directory" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-[#102a43]">Encontrar empresas <ArrowRight className="h-4 w-4" /></Link>
+                  <Link to="/requests/new" className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white">Publicar necessidade</Link>
                 </div>
               </div>
               <div className="hidden items-center justify-center border-l border-white/10 bg-white/[.03] p-8 lg:flex">
@@ -114,6 +116,11 @@ function Dashboard() {
                 </div>
               </div>
             </div>
+          </section>
+
+          <section className="mt-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+            <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]"><Search className="h-5 w-5" /></div><div><h2 className="font-bold text-[#102a43]">Pesquisa rápida</h2><p className="text-xs text-slate-500">Encontre empresas ou oportunidades sem sair do balcão.</p></div></div>
+            <div className="mt-5 grid gap-3 md:grid-cols-[1.5fr_1fr_1fr_auto]"><input placeholder="Empresa, serviço, produto..." className="h-11 rounded-xl border border-slate-200 px-4 text-sm outline-none focus:border-[#0f766e]" /><select className="h-11 rounded-xl border border-slate-200 px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]"><option>Todos os sectores</option><option>Construção e Engenharia</option><option>Tecnologia e Serviços</option><option>Logística e Transportes</option></select><select className="h-11 rounded-xl border border-slate-200 px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]"><option>Todas as províncias</option><option>Maputo</option><option>Maputo Cidade</option><option>Gaza</option><option>Manica</option><option>Nampula</option><option>Sofala</option></select><Link to="/directory" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 text-sm font-bold text-white">Pesquisar <ArrowRight className="h-4 w-4" /></Link></div>
           </section>
 
           <section className="mt-7">
