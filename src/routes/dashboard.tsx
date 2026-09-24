@@ -105,9 +105,21 @@ function Dashboard() {
 
     const next = { ...modules, [module]: true };
     setModules(next);
-    await supabase
+
+    const { error } = await supabase
       .from("account_modules")
       .upsert({ user_id: userData.user.id, ...next });
+
+    if (error) return;
+
+    const destination: Record<keyof AccountModules, "/requests" | "/dashboard/profile" | "/requests/new"> = {
+      buying_enabled: "/requests",
+      selling_enabled: "/dashboard/profile",
+      advanced_qualification_enabled: "/requests/new",
+      supplier_invites_enabled: "/requests/new",
+    };
+
+    navigate({ to: destination[module] });
   }
 
   async function signOut() {
@@ -115,8 +127,6 @@ function Dashboard() {
     window.location.href = "/login";
   }
 
-  const activeModules =
-    Number(modules.buying_enabled) + Number(modules.selling_enabled);
   const firstName = fullName.trim().split(" ")[0] || "Utilizador";
 
   function runSearch() {
