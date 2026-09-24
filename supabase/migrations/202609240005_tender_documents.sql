@@ -65,16 +65,54 @@ with check (owner_id=auth.uid());
 drop policy if exists "Participants read request documents" on public.request_documents;
 create policy "Participants read request documents" on public.request_documents for select to authenticated
 using (
-  is_public
-  or exists (select 1 from public.requests r where r.id=request_id and r.owner_id=auth.uid())
+  exists (select 1 from public.requests r where r.id=request_id and r.owner_id=auth.uid())
   or exists (select 1 from public.request_document_access a where a.document_id=request_documents.id and a.participant_id=auth.uid() and a.status='approved')
+  or (
+    is_public
+    and exists (
+      select 1
+      from public.requests r
+      join public.companies c on c.owner_id=auth.uid()
+      where r.id=request_id
+        and r.status='open'
+        and r.owner_id<>auth.uid()
+        and (
+          (r.participation_mode in ('open','qualified') and public.company_qualifies_for_request(r.id,c.id))
+          or (
+            r.participation_mode='invite_only'
+            and exists (
+              select 1 from public.proposal_invitations i
+              where i.request_id=r.id and i.supplier_id=c.id and i.status in ('invited','accepted')
+            )
+          )
+        )
+    )
+  )
 );
 
 drop policy if exists "Participants request document access" on public.request_document_access;
 create policy "Participants request document access" on public.request_document_access for insert to authenticated
 with check (
   participant_id=auth.uid()
-  and exists (select 1 from public.requests r where r.id=request_id and r.status='open' and r.owner_id<>auth.uid())
+  and exists (
+    select 1
+    from public.requests r
+    join public.companies c on c.owner_id=auth.uid()
+    where r.id=request_id
+      and r.status='open'
+      and r.owner_id<>auth.uid()
+      and (
+        (r.participation_mode in ('open','qualified') and public.company_qualifies_for_request(r.id,c.id))
+        or (
+          r.participation_mode='invite_only'
+          and exists (
+            select 1 from public.proposal_invitations i
+            where i.request_id=r.id and i.supplier_id=c.id and i.status in ('invited','accepted')
+          )
+        )
+      )
+  )
+  and exists (select 1 from public.request_documents d where d.id=document_id and d.request_id=request_id)
 );
 
 drop policy if exists "Participants and owners read document access" on public.request_document_access;
@@ -127,7 +165,32 @@ using (
     exists (
       select 1 from public.request_documents d
       where d.storage_path=name
-        and (d.is_public or d.owner_id=auth.uid())
+        and (
+          d.owner_id=auth.uid()
+          or (
+            d.is_public
+            and (
+              exists (
+                select 1
+                from public.requests r
+                join public.companies c on c.owner_id=auth.uid()
+                where r.id=d.request_id
+                  and r.status='open'
+                  and r.owner_id<>auth.uid()
+                  and (
+                    (r.participation_mode in ('open','qualified') and public.company_qualifies_for_request(r.id,c.id))
+                    or (
+                      r.participation_mode='invite_only'
+                      and exists (
+                        select 1 from public.proposal_invitations i
+                        where i.request_id=r.id and i.supplier_id=c.id and i.status in ('invited','accepted')
+                      )
+                    )
+                  )
+              )
+            )
+          )
+        )
     )
     or exists (
       select 1 from public.request_document_access a
