@@ -12,10 +12,7 @@ function createSupabaseClient() {
 
   const SUPABASE_KEY =
     import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
-    import.meta.env["VITE_SUPABASE_ANON_KEY"] ||
-    import.meta.env["VITE_SUPABASE_KEY"] ||
-    serverEnv?.["SUPABASE_PUBLISHABLE_KEY"] ||
-    serverEnv?.["SUPABASE_ANON_KEY"];
+    serverEnv?.["SUPABASE_PUBLISHABLE_KEY"];
 
   if (!SUPABASE_URL || !SUPABASE_KEY) {
     const missing = [
