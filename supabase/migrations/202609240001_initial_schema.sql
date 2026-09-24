@@ -107,3 +107,34 @@ create policy "Proposal participants can update proposals"
     exists (select 1 from public.requests r where r.id = request_id and r.owner_id = auth.uid())
     or exists (select 1 from public.companies c where c.id = supplier_id and c.owner_id = auth.uid())
   );
+
+
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  phone text,
+  preferred_language text not null default 'pt' check (preferred_language in ('pt','en')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.user_roles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  role text not null check (role in ('buyer','supplier','buyer_supplier','moderator','admin')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists user_roles_role_idx on public.user_roles(role);
+
+alter table public.profiles enable row level security;
+alter table public.user_roles enable row level security;
+
+create policy "Users can read own profile"
+  on public.profiles for select using (auth.uid() = id);
+
+create policy "Users can manage own profile"
+  on public.profiles for all using (auth.uid() = id) with check (auth.uid() = id);
+
+create policy "Users can read own role"
+  on public.user_roles for select using (auth.uid() = user_id);
