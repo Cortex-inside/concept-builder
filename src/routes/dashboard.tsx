@@ -357,20 +357,20 @@ function Dashboard() {
               <ModuleCard
                 icon={<ShoppingBag />}
                 title="Comprar"
-                description="Encontre fornecedores, publique necessidades e compare propostas comerciais."
+                description="Publique necessidades, defina critérios e receba propostas."
                 enabled={modules.buying_enabled}
                 onActivate={() => activateModule("buying_enabled")}
                 href="/requests/new"
-                cta={modules.buying_enabled ? "Publicar necessidade" : "Activar Comprar"}
+                cta={modules.buying_enabled ? "Abrir compras" : "Activar"}
               />
               <ModuleCard
                 icon={<Store />}
                 title="Vender"
-                description="Apresente a sua empresa, encontre oportunidades e responda a pedidos compatíveis."
+                description="Descubra oportunidades compatíveis e apresente propostas."
                 enabled={modules.selling_enabled}
                 onActivate={() => activateModule("selling_enabled")}
                 href="/requests"
-                cta={modules.selling_enabled ? "Ver oportunidades" : "Activar Vender"}
+                cta={modules.selling_enabled ? "Ver oportunidades" : "Activar"}
               />
             </div>
           </section>
@@ -492,9 +492,9 @@ function ModuleCard({
   cta: string;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[22px] border border-[#dfe6ed] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
+    <div className="relative overflow-hidden rounded-2xl border border-[#e2e8ee] bg-white p-5 shadow-sm transition hover:border-[#b9ddd8] hover:shadow-md sm:p-6">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#102a43] text-white">{icon}</div>
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]">{icon}</div>
         <span className={enabled ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700" : "rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"}>
           {enabled && <CheckCircle2 className="h-3.5 w-3.5" />}
           {enabled ? "Activo" : "Disponível"}
