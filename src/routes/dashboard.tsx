@@ -2,6 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   Bell,
+  Clock3,
+  ShieldCheck,
+  Sparkles,
   Building2,
   CheckCircle2,
   ChevronRight,
@@ -353,32 +356,22 @@ function Dashboard() {
                 A sua conta é única. Os módulos <strong>Comprar</strong> e <strong>Vender</strong> activam as funcionalidades necessárias para cada lado da sua actividade comercial.
               </p>
             </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              <ModuleCard
-                icon={<ShoppingBag />}
-                title="Comprar"
-                description="Publique necessidades, defina critérios e receba propostas."
-                enabled={modules.buying_enabled}
-                onActivate={() => activateModule("buying_enabled")}
-                href="/requests/new"
-                cta={modules.buying_enabled ? "Abrir compras" : "Activar"}
-              />
-              <ModuleCard
-                icon={<Store />}
-                title="Vender"
-                description="Descubra oportunidades compatíveis e apresente propostas."
-                enabled={modules.selling_enabled}
-                onActivate={() => activateModule("selling_enabled")}
-                href="/requests"
-                cta={modules.selling_enabled ? "Ver oportunidades" : "Activar"}
-              />
+            <div className="grid gap-5 lg:grid-cols-2">
+              <ModuleCard icon={<ShoppingBag />} title="Comprar" description="Transforme necessidades da sua empresa em pedidos estruturados e encontre fornecedores compatíveis." enabled={modules.buying_enabled} onActivate={() => activateModule("buying_enabled")} href="/requests/new" cta={modules.buying_enabled ? "Abrir módulo Comprar" : "Activar Comprar"} tone="teal" features={["Publicar necessidades", "Definir critérios e localização", "Receber e comparar propostas"]} />
+              <ModuleCard icon={<Store />} title="Vender" description="Encontre oportunidades relevantes, apresente a sua empresa e responda com propostas comerciais." enabled={modules.selling_enabled} onActivate={() => activateModule("selling_enabled")} href="/requests" cta={modules.selling_enabled ? "Abrir módulo Vender" : "Activar Vender"} tone="navy" features={["Encontrar oportunidades", "Apresentar propostas", "Criar novas relações comerciais"]} />
             </div>
           </section>
 
-          <section className="mt-7 grid gap-4 sm:grid-cols-3">
-            <Metric label="Pedidos publicados" value={String(requests.length)} icon={<ShoppingBag />} />
-            <Metric label="Módulos activos" value={String(activeModules)} icon={<CheckCircle2 />} />
-            <Metric label="Estado da conta" value="Activa" icon={<CircleUserRound />} />
+          <section className="mt-7 grid gap-4 lg:grid-cols-[1fr_1fr_1fr_1.35fr]">
+            <Metric label="Pedidos publicados" value={String(requests.length)} icon={<ShoppingBag />} detail="Necessidades criadas" />
+            <Metric label="Módulos activos" value={`${activeModules}/2`} icon={<CheckCircle2 />} detail="Comprar e Vender" />
+            <Metric label="Estado da conta" value="Activa" icon={<ShieldCheck />} detail="Conta operacional" />
+            <div className="rounded-2xl border border-[#dfe6ed] bg-[#102a43] p-5 text-white shadow-sm">
+              <div className="flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wide text-slate-300">Próximo passo</span><Sparkles className="h-5 w-5 text-teal-300" /></div>
+              <p className="mt-3 text-sm font-extrabold">Complete o seu espaço comercial</p>
+              <p className="mt-1 text-xs leading-5 text-slate-300">Active os módulos que pretende usar e mantenha o perfil da empresa atualizado.</p>
+              <Link to="/dashboard/profile" className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-teal-200">Rever perfil <ArrowRight className="h-3.5 w-3.5" /></Link>
+            </div>
           </section>
 
           <section className="mt-7 overflow-hidden rounded-2xl border border-[#dfe6ed] bg-white shadow-sm">
@@ -475,62 +468,37 @@ function ActionCard({
 }
 
 function ModuleCard({
-  icon,
-  title,
-  description,
-  enabled,
-  onActivate,
-  href,
-  cta,
+  icon, title, description, enabled, onActivate, href, cta, tone, features,
 }: {
-  icon: ReactNode;
-  title: string;
-  description: string;
-  enabled: boolean;
-  onActivate: () => void;
-  href: string;
-  cta: string;
+  icon: ReactNode; title: string; description: string; enabled: boolean; onActivate: () => void; href: string; cta: string; tone: "teal" | "navy"; features: string[];
 }) {
+  const accent = tone === "teal";
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#e2e8ee] bg-white p-5 shadow-sm transition hover:border-[#b9ddd8] hover:shadow-md sm:p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]">{icon}</div>
-        <span className={enabled ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700" : "rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700"}>
-          {enabled && <CheckCircle2 className="h-3.5 w-3.5" />}
-          {enabled ? "Activo" : "Disponível"}
-        </span>
+    <div className="group relative overflow-hidden rounded-[24px] border border-[#dfe6ed] bg-white p-6 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-[#b9ddd8] hover:shadow-lg sm:p-7">
+      <div className={accent ? "absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#74cfc2]/15 blur-2xl" : "absolute -right-12 -top-12 h-36 w-36 rounded-full bg-[#102a43]/10 blur-2xl"} />
+      <div className="relative">
+        <div className="flex items-start justify-between gap-4">
+          <div className={accent ? "flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f5f3] text-[#0f766e]" : "flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf1f6] text-[#102a43]"}>{icon}</div>
+          <span className={enabled ? "inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1.5 text-xs font-bold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1.5 text-xs font-bold text-amber-700"}>{enabled ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Clock3 className="h-3.5 w-3.5" />}{enabled ? "Activo" : "Disponível"}</span>
+        </div>
+        <div className="mt-6 flex items-end justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.14em] text-slate-400">Módulo</p><h3 className="mt-1 text-2xl font-extrabold tracking-tight text-[#102a43]">{title}</h3></div><span className="text-xs font-bold text-slate-400">01 / 02</span></div>
+        <p className="mt-3 max-w-xl text-sm leading-6 text-slate-500">{description}</p>
+        <div className="mt-5 grid gap-2 sm:grid-cols-3">{features.map((feature) => <div key={feature} className="rounded-xl bg-[#f6f8fb] px-3 py-2.5 text-xs font-semibold leading-5 text-slate-600"><CheckCircle2 className="mb-1 h-3.5 w-3.5 text-[#0f766e]" />{feature}</div>)}</div>
+        <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-5">
+          {enabled ? <Link to={href as never} className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5f59]">{cta} <ArrowRight className="h-4 w-4" /></Link> : <button onClick={onActivate} className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#163a5f]">{cta} <ArrowRight className="h-4 w-4" /></button>}
+          <span className="text-xs text-slate-400">{enabled ? "Funcionalidades prontas a utilizar" : "Pode activar este módulo quando quiser"}</span>
+        </div>
       </div>
-      <h3 className="mt-5 text-xl font-extrabold text-[#102a43]">{title}</h3>
-      <p className="mt-2 max-w-md text-sm leading-6 text-slate-500">{description}</p>
-      {enabled ? (
-        <Link to={href as never} className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#0b5f59]">
-          {cta} <ArrowRight className="h-4 w-4" />
-        </Link>
-      ) : (
-        <button onClick={onActivate} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#163a5f]">
-          {cta} <ArrowRight className="h-4 w-4" />
-        </button>
-      )}
     </div>
   );
 }
 
-function Metric({
-  label,
-  value,
-  icon,
-}: {
-  label: string;
-  value: string;
-  icon: ReactNode;
-}) {
+function Metric({ label, value, icon, detail }: { label: string; value: string; icon: ReactNode; detail: string }) {
   return (
     <div className="rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</span>
-        <span className="text-[#0f766e]">{icon}</span>
-      </div>
+      <div className="flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</span><span className="text-[#0f766e]">{icon}</span></div>
       <p className="mt-3 text-2xl font-extrabold tracking-tight text-[#102a43]">{value}</p>
+      <p className="mt-1 text-xs text-slate-500">{detail}</p>
     </div>
   );
 }
