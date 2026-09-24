@@ -14,7 +14,7 @@ returns boolean
 language sql
 stable
 set search_path = public, pg_temp
-as $
+as $function$
   select exists (
     select 1
     from public.requests r
