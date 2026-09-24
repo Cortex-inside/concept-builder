@@ -16,23 +16,29 @@ export type Database = {
     Tables: {
       account_modules: {
         Row: {
+          advanced_qualification_enabled: boolean
           buying_enabled: boolean
           created_at: string
           selling_enabled: boolean
+          supplier_invites_enabled: boolean
           updated_at: string
           user_id: string
         }
         Insert: {
+          advanced_qualification_enabled?: boolean
           buying_enabled?: boolean
           created_at?: string
           selling_enabled?: boolean
+          supplier_invites_enabled?: boolean
           updated_at?: string
           user_id: string
         }
         Update: {
+          advanced_qualification_enabled?: boolean
           buying_enabled?: boolean
           created_at?: string
           selling_enabled?: boolean
+          supplier_invites_enabled?: boolean
           updated_at?: string
           user_id?: string
         }
@@ -41,13 +47,16 @@ export type Database = {
       companies: {
         Row: {
           address: string | null
+          certifications: string[]
           city: string | null
+          completed_projects: number
           created_at: string
           description: string
           district: string | null
           email: string | null
           employees: string | null
           entity_type: string | null
+          experience_summary: string | null
           founded_year: number | null
           id: string
           name: string
@@ -72,13 +81,16 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          certifications?: string[]
           city?: string | null
+          completed_projects?: number
           created_at?: string
           description: string
           district?: string | null
           email?: string | null
           employees?: string | null
           entity_type?: string | null
+          experience_summary?: string | null
           founded_year?: number | null
           id?: string
           name: string
@@ -103,13 +115,16 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          certifications?: string[]
           city?: string | null
+          completed_projects?: number
           created_at?: string
           description?: string
           district?: string | null
           email?: string | null
           employees?: string | null
           entity_type?: string | null
+          experience_summary?: string | null
           founded_year?: number | null
           id?: string
           name?: string
@@ -342,16 +357,216 @@ export type Database = {
           },
         ]
       }
+      request_document_access: {
+        Row: {
+          created_at: string
+          document_id: string
+          id: string
+          monitor_flag: boolean
+          monitor_note: string | null
+          participant_id: string
+          payment_proof_file_name: string | null
+          payment_proof_path: string | null
+          payment_submitted_at: string | null
+          request_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          document_id: string
+          id?: string
+          monitor_flag?: boolean
+          monitor_note?: string | null
+          participant_id: string
+          payment_proof_file_name?: string | null
+          payment_proof_path?: string | null
+          payment_submitted_at?: string | null
+          request_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          document_id?: string
+          id?: string
+          monitor_flag?: boolean
+          monitor_note?: string | null
+          participant_id?: string
+          payment_proof_file_name?: string | null
+          payment_proof_path?: string | null
+          payment_submitted_at?: string | null
+          request_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_document_access_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "request_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_document_access_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_documents: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number | null
+          id: string
+          is_public: boolean
+          mime_type: string | null
+          owner_id: string
+          request_id: string
+          storage_path: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          id?: string
+          is_public?: boolean
+          mime_type?: string | null
+          owner_id: string
+          request_id: string
+          storage_path: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          is_public?: boolean
+          mime_type?: string | null
+          owner_id?: string
+          request_id?: string
+          storage_path?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_documents_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_interests: {
+        Row: {
+          created_at: string
+          id: string
+          request_id: string
+          status: string
+          supplier_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          request_id: string
+          status?: string
+          supplier_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          request_id?: string
+          status?: string
+          supplier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_interests_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_interests_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_monitor_flags: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string | null
+          request_id: string
+          resolved_at: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id?: string | null
+          request_id: string
+          resolved_at?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string | null
+          request_id?: string
+          resolved_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_monitor_flags_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       requests: {
         Row: {
           budget: string | null
           created_at: string
           description: string
+          document_access: string
+          document_currency: string | null
+          document_price: number | null
           id: string
+          min_completed_projects: number | null
+          min_years_in_market: number | null
           owner_id: string
+          participation_mode: string
+          payment_instructions: string | null
           province: string
+          qualification_note: string | null
+          require_verified: boolean
+          required_certifications: string[]
+          required_experience: string | null
           sector: string
           status: string
+          tender_summary: string | null
+          terms_content: string | null
           title: string
           updated_at: string
         }
@@ -359,11 +574,24 @@ export type Database = {
           budget?: string | null
           created_at?: string
           description: string
+          document_access?: string
+          document_currency?: string | null
+          document_price?: number | null
           id?: string
+          min_completed_projects?: number | null
+          min_years_in_market?: number | null
           owner_id: string
+          participation_mode?: string
+          payment_instructions?: string | null
           province: string
+          qualification_note?: string | null
+          require_verified?: boolean
+          required_certifications?: string[]
+          required_experience?: string | null
           sector: string
           status?: string
+          tender_summary?: string | null
+          terms_content?: string | null
           title: string
           updated_at?: string
         }
@@ -371,11 +599,24 @@ export type Database = {
           budget?: string | null
           created_at?: string
           description?: string
+          document_access?: string
+          document_currency?: string | null
+          document_price?: number | null
           id?: string
+          min_completed_projects?: number | null
+          min_years_in_market?: number | null
           owner_id?: string
+          participation_mode?: string
+          payment_instructions?: string | null
           province?: string
+          qualification_note?: string | null
+          require_verified?: boolean
+          required_certifications?: string[]
+          required_experience?: string | null
           sector?: string
           status?: string
+          tender_summary?: string | null
+          terms_content?: string | null
           title?: string
           updated_at?: string
         }
@@ -407,7 +648,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      company_qualifies_for_request: {
+        Args: { p_company_id: string; p_request_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
