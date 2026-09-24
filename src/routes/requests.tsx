@@ -57,6 +57,13 @@ function matchRequest(request: Request, company: Company): Match {
   return { company, score, reasons };
 }
 
+function DocumentAccess({requestId,access,price,currency,paymentInstructions,onRequest}:{requestId:string;access:"none"|"free"|"paid";price?:number|null;currency?:string|null;paymentInstructions?:string|null;onRequest:(r:string,d:string,p:boolean)=>void}) {
+  const [docs,setDocs]=useState<any[]>([]);
+  const [proof,setProof]=useState<File|null>(null);
+  useEffect(()=>{supabase.from("request_documents").select("*").eq("request_id",requestId).eq("is_public",access==="free").then(({data})=>setDocs(data??[]));},[requestId,access]);
+  if(!docs.length)return <div className="mt-4 rounded-xl border border-dashed border-slate-200 p-4 text-xs text-slate-500">A documentação será disponibilizada pelo comprador.</div>;
+  return <div className="mt-4 space-y-3">{docs.map(d=><div key={d.id} className="rounded-xl border border-slate-200 bg-white p-4"><p className="font-semibold text-sm text-[#102a43]">{d.file_name}</p>{access==="free"?<button onClick={()=>onRequest(requestId,d.id,false)} className="mt-2 rounded-lg bg-[#0f766e] px-3 py-2 text-xs font-bold text-white">Aceder à documentação</button>:<><p className="mt-2 text-xs text-slate-500">Acesso: {price} {currency}. {paymentInstructions}</p><input type="file" onChange={e=>setProof(e.target.files?.[0]??null)} className="mt-2 field"/><button disabled={!proof} onClick={async()=>{if(!proof)return;const {data:u}=await supabase.auth.getUser();if(!u.user)return;const path=`requests/${requestId}/payments/${u.user.id}-${Date.now()}-${proof.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;const {error:e}=await supabase.storage.from("request-documents").upload(path,proof,{upsert:false});if(e)return;const {error:x}=await supabase.from("request_document_access").upsert({request_id:requestId,document_id:d.id,participant_id:u.user.id,status:"pending",payment_proof_path:path,payment_proof_file_name:proof.name,payment_submitted_at:new Date().toISOString()},{onConflict:"document_id,participant_id"});if(x)console.error(x);}} className="mt-2 rounded-lg bg-[#102a43] px-3 py-2 text-xs font-bold text-white disabled:opacity-50">Enviar comprovativo</button></>}</div>)}</div>;
+}
 function Requests() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [companies, setCompanies] = useState<Company[]>([]);
