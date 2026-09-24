@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CircleUserRound,
   FileText,
+  FileCheck2,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -145,6 +146,8 @@ function Dashboard() {
               <NavItem to="/dashboard/profile" icon={<Building2 />} label="Minha empresa" />
               <NavItem to="/requests" icon={<PackageSearch />} label="Oportunidades" />
               <NavItem to="/proposals" icon={<FileText />} label="Propostas" />
+                  <NavItem to="/dashboard/documents" icon={<FileCheck2 />} label="Documentação" />
+              <NavItem to="/dashboard/documents" icon={<FileCheck2 />} label="Documentação" />
               <NavItem to="/plans" icon={<Store />} label="Planos" />
             </nav>
 
