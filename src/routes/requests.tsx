@@ -13,6 +13,15 @@ type Match = {
 };
 
 function matchRequest(request: Request, company: Company): Match {
+  const currentYear = new Date().getFullYear();
+  const yearsInMarket = company.founded_year ? Math.max(0, currentYear - company.founded_year) : 0;
+  const certificationSet = new Set((company.certifications ?? []).map((item) => item.toLowerCase()));
+  const requiredCertifications = request.required_certifications ?? [];
+  const certificationsOk = requiredCertifications.every((item) => certificationSet.has(item.toLowerCase()));
+  if (request.require_verified && !company.verified) return { company, score: 0, reasons: ["Não cumpre o requisito de verificação"] };
+  if (request.min_years_in_market != null && yearsInMarket < request.min_years_in_market) return { company, score: 0, reasons: ["Não cumpre a antiguidade mínima"] };
+  if (request.min_completed_projects != null && (company.completed_projects ?? 0) < request.min_completed_projects) return { company, score: 0, reasons: ["Não cumpre o número mínimo de projectos"] };
+  if (!certificationsOk) return { company, score: 0, reasons: ["Não cumpre as certificações exigidas"] };
   let score = 0;
   const reasons: string[] = [];
 
@@ -117,7 +126,7 @@ function Requests() {
           filtered.map((request) => {
             const matches = companies
               .map((company) => matchRequest(request, company))
-              .filter((match) => match.score >= 50)
+              .filter((match) => match.score >= 50 && (request.participation_mode !== "invite_only" || true))
               .sort((a, b) => b.score - a.score || a.company.name.localeCompare(b.company.name));
 
             return (
@@ -145,7 +154,7 @@ function Requests() {
                     <div>
                       <h3 className="font-extrabold text-[#102a43]">Fornecedores compatíveis</h3>
                       <p className="mt-1 text-xs text-slate-500">
-                        Correspondência calculada por sector, área de operação, serviços e verificação.
+                        Correspondência calculada por sector, área de operação, serviços e verificação. Pedidos abertos permitem manifestação voluntária; pedidos qualificados aplicam os critérios definidos pelo comprador.
                       </p>
                     </div>
                     <Link to="/proposals" className="text-sm font-bold text-[#0b5f59]">
