@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   Bell,
@@ -42,10 +42,16 @@ function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchSector, setSearchSector] = useState("");
   const [searchProvince, setSearchProvince] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    supabase.auth.getUser().then(async ({ data }) => {
-      if (!data.user) return;
+    let cancelled = false;
+    supabase.auth.getSession().then(async ({ data: sessionData }) => {
+      if (!sessionData.session) {
+        if (!cancelled) navigate({ to: "/login" });
+        return;
+      }
+      const data = { user: sessionData.session.user };
 
       const [requestResult, moduleResult, profileResult, companyResult] =
         await Promise.all([
@@ -75,8 +81,10 @@ function Dashboard() {
       if (moduleResult.data) setModules(moduleResult.data);
       if (profileResult.data?.full_name) setFullName(profileResult.data.full_name);
       if (companyResult.data?.name) setCompanyName(companyResult.data.name);
+      if (!cancelled) return;
     });
-  }, []);
+    return () => { cancelled = true; };
+  }, [navigate]);
 
   async function activateModule(module: "buying_enabled" | "selling_enabled") {
     const { data: userData } = await supabase.auth.getUser();
