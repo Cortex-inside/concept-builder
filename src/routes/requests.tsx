@@ -1,16 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { MapPin, Building2 } from "lucide-react";
 import { supabase } from "../lib/supabase";
-import type { Request } from "../lib/concept-data";
+import type { Request, Company } from "../lib/concept-data";
 
-export const Route = createFileRoute("/requests")({ component: Requests });
-
-function Requests() {
-  const [requests, setRequests] = useState<Request[]>([]);
-  useEffect(() => {
-    supabase.from("requests").select("*").eq("status", "open").order("created_at", { ascending: false }).then(({ data }) => setRequests((data ?? []) as Request[]));
-  }, []);
-  return <main className="mx-auto max-w-6xl px-4 py-12 lg:px-6"><div className="flex flex-wrap justify-between gap-4"><div><h1 className="text-3xl font-bold text-[#102a43]">Pedidos</h1><p className="mt-2 text-slate-600">Necessidades publicadas na plataforma.</p></div><Link to="/requests/new" className="rounded-lg bg-[#0f766e] px-4 py-2 font-semibold text-white">Criar pedido</Link></div>
-    <div className="mt-8 space-y-4">{requests.length === 0 ? <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">Ainda não existem pedidos publicados.</div> : requests.map(request => <article key={request.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h2 className="font-bold text-[#102a43]">{request.title}</h2><p className="mt-1 text-sm text-slate-500">{request.sector} · {request.province}{request.budget ? ` · ${request.budget}` : ""}</p><p className="mt-3 text-sm text-slate-600">{request.description}</p><Link to="/proposals" className="mt-4 inline-block text-sm font-semibold text-[#0b5f59]">Ver fornecedores e propostas →</Link></article>)}</div>
-  </main>;
+export const Route=createFileRoute("/requests")({component:Requests});
+function Requests(){
+ const [requests,setRequests]=useState<Request[]>([]),[companies,setCompanies]=useState<Company[]>([]),[q,setQ]=useState(""),[sector,setSector]=useState("");
+ useEffect(()=>{Promise.all([supabase.from("requests").select("*").eq("status","open").order("created_at",{ascending:false}),supabase.from("companies").select("*").order("name")]).then(([r,c])=>{setRequests((r.data??[]) as Request[]);setCompanies((c.data??[]) as Company[])})},[]);
+ const counts=useMemo(()=>{const m=new Map<string,number>();for(const c of companies)m.set(c.sector,(m.get(c.sector)??0)+1);return m},[companies]);
+ const filtered=requests.filter(r=>(!q||[r.title,r.description,r.sector,r.province].join(" ").toLowerCase().includes(q.toLowerCase()))&&(!sector||r.sector===sector));
+ return <main className="mx-auto max-w-6xl px-4 py-12 lg:px-6"><div className="flex flex-wrap justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">Oportunidades</p><h1 className="mt-2 text-3xl font-bold text-[#102a43]">Pedidos de empresas</h1><p className="mt-2 text-slate-600">Necessidades abertas que podem ser atendidas por fornecedores.</p></div><Link to="/requests/new" className="rounded-lg bg-[#0f766e] px-4 py-2 font-semibold text-white">Criar pedido</Link></div>
+ <div className="mt-8 grid gap-3 md:grid-cols-[1fr_220px]"><input className="field" placeholder="Pesquisar pedidos" value={q} onChange={e=>setQ(e.target.value)}/><select className="field" value={sector} onChange={e=>setSector(e.target.value)}><option value="">Todos os sectores</option>{[...new Set(requests.map(r=>r.sector))].map(s=><option key={s}>{s}</option>)}</select></div>
+ <div className="mt-8 space-y-4">{filtered.length===0?<div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">Ainda não existem pedidos que correspondam aos filtros.</div>:filtered.map(r=>{const matches=counts.get(r.sector)??0;return <article key={r.id} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div className="flex flex-wrap justify-between gap-3"><div><h2 className="text-lg font-bold text-[#102a43]">{r.title}</h2><p className="mt-1 flex items-center gap-2 text-sm text-slate-500"><MapPin size={14}/>{r.sector} · {r.province}</p></div><span className="rounded-full bg-[#e8f5f3] px-3 py-1 text-xs font-bold text-[#0b5f59]">{matches} fornecedores no sector</span></div><p className="mt-4 text-sm leading-6 text-slate-600">{r.description}</p><div className="mt-5 flex items-center gap-2 text-xs text-slate-500"><Building2 size={14}/>{matches} empresas disponíveis para análise</div><Link to="/proposals" className="mt-5 inline-block text-sm font-bold text-[#0b5f59]">Abrir oportunidade →</Link></article>})}</div></main>;
 }
