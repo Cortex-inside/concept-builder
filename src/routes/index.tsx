@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, CheckCircle2, ChevronRight, FileText, Handshake, Search, ShieldCheck, TrendingUp, Users, WalletCards } from "lucide-react";
+import { ArrowRight, BadgeCheck, CheckCircle2, ChevronRight, FileText, Handshake, Search, ShieldCheck, TrendingUp, Users, WalletCards, Megaphone, Building2, BriefcaseBusiness, Wrench, Truck, Cpu, HardHat } from "lucide-react";
 import { useI18n } from "../lib/i18n";
 
 export const Route = createFileRoute("/")({ component: Home });
@@ -71,6 +71,40 @@ function Home() {
                 {pt ? "Uma plataforma para aproximar quem procura de quem pode fornecer." : "A platform connecting businesses that need with businesses that can supply."}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-[#fbf4e5]">
+        <div className="mx-auto max-w-7xl px-4 py-10 lg:px-6">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]"><Megaphone size={15}/> {pt ? "Destaques do mercado" : "Market highlights"}</p>
+              <h2 className="mt-2 text-2xl font-bold text-[#102a43]">{pt ? "Conteúdos e oportunidades em destaque" : "Featured content and opportunities"}</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">{pt ? "Espaços editoriais para destacar categorias, empresas, serviços e oportunidades relevantes dentro do Concept Builder." : "Editorial spaces to highlight categories, companies, services and relevant opportunities inside Concept Builder."}</p>
+            </div>
+            <Link to="/directory" className="hidden text-sm font-bold text-[#0f766e] sm:inline-flex">{pt ? "Ver directório" : "View directory"} <ArrowRight className="ml-1" size={16}/></Link>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {(pt ? [
+              ["Construção & Engenharia","Empresas, empreiteiros, projectistas e fornecedores para obras e infra-estruturas.",HardHat,"/directory"],
+              ["Tecnologia & Serviços","Software, serviços profissionais, consultoria e soluções para empresas.",Cpu,"/directory"],
+              ["Logística & Fornecimento","Transporte, equipamentos, materiais e fornecimento empresarial.",Truck,"/directory"],
+            ] : [
+              ["Construction & Engineering","Companies, contractors, designers and suppliers for projects and infrastructure.",HardHat,"/directory"],
+              ["Technology & Services","Software, professional services, consulting and business solutions.",Cpu,"/directory"],
+              ["Logistics & Supply","Transport, equipment, materials and business supply.",Truck,"/directory"],
+            ]).map(([title,desc,Icon,to]) => (
+              <Link key={title as string} to={to as "/directory"} className="group rounded-xl border border-[#eadbb9] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="grid h-11 w-11 place-items-center rounded-lg bg-[#e8f5f3] text-[#0f766e]"><Icon size={20}/></div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#b47a20]">{pt ? "Destaque" : "Featured"}</span>
+                </div>
+                <h3 className="mt-5 font-bold text-[#102a43]">{title as string}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{desc as string}</p>
+                <span className="mt-4 inline-flex items-center text-sm font-bold text-[#0f766e]">{pt ? "Explorar categoria" : "Explore category"} <ArrowRight className="ml-1" size={15}/></span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
