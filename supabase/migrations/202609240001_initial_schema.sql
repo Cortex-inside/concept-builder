@@ -84,7 +84,7 @@ create table if not exists public.profiles (
 
 create table if not exists public.user_roles (
   user_id uuid primary key references auth.users(id) on delete cascade,
-  role text not null check (role in ('buyer','supplier','buyer_supplier','moderator','admin')),
+  role text not null check (role in ('user','moderator','admin')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -129,13 +129,13 @@ create policy if not exists "Company owners can update verification documents" o
 create schema if not exists app_private;
 create or replace function app_private.handle_new_user()
 returns trigger language plpgsql security definer set search_path = public, app_private as $$
-declare requested_role text := coalesce(new.raw_user_meta_data ->> 'role', 'buyer_supplier');
+
 begin
   insert into public.profiles (id, full_name, phone, preferred_language)
   values (new.id, nullif(new.raw_user_meta_data ->> 'full_name',''), nullif(new.raw_user_meta_data ->> 'phone',''), case when new.raw_user_meta_data ->> 'preferred_language' = 'en' then 'en' else 'pt' end)
   on conflict (id) do nothing;
-  if requested_role not in ('buyer','supplier','buyer_supplier') then requested_role := 'buyer_supplier'; end if;
-  insert into public.user_roles (user_id, role) values (new.id, requested_role) on conflict (user_id) do nothing;
+  insert into public.user_roles (user_id, role) values (new.id, 'user') on conflict (user_id) do nothing;
+  insert into public.account_modules (user_id) values (new.id) on conflict (user_id) do nothing;
   return new;
 end; $$;
 drop trigger if exists on_auth_user_created on auth.users;
@@ -144,5 +144,5 @@ create trigger on_auth_user_created after insert on auth.users for each row exec
 create policy if not exists "Request owners and invited suppliers can read invitations" on public.proposal_invitations for select using (exists (select 1 from public.requests r where r.id = request_id and r.owner_id = auth.uid()) or exists (select 1 from public.companies c where c.id = supplier_id and c.owner_id = auth.uid()));
 create policy if not exists "Request owners can create invitations" on public.proposal_invitations for insert with check (exists (select 1 from public.requests r where r.id = request_id and r.owner_id = auth.uid()));
 create policy if not exists "Proposal participants can read proposals" on public.proposals for select using (exists (select 1 from public.requests r where r.id = request_id and r.owner_id = auth.uid()) or exists (select 1 from public.companies c where c.id = supplier_id and c.owner_id = auth.uid()));
-create policy if not exists "Invited suppliers can create proposals" on public.proposals for insert with check (exists (select 1 from public.companies c join public.proposal_invitations i on i.supplier_id = c.id where c.id = supplier_id and c.owner_id = auth.uid() and i.request_id = request_id and i.status in ('invited','accepted')));
+create policy if not exists "Invited suppliers can create proposals" on public.proposals for insert with check (exists (select 1 from public.companies c join public.proposal_invitations i on i.supplier_id = c.id where c.id = supplier_id and c.owner_id = auth.uid() and i.request_id = proposals.request_id and i.status in ('invited','accepted')));
 create policy if not exists "Proposal participants can update proposals" on public.proposals for update using (exists (select 1 from public.requests r where r.id = request_id and r.owner_id = auth.uid()) or exists (select 1 from public.companies c where c.id = supplier_id and c.owner_id = auth.uid()));
