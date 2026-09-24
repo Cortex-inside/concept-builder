@@ -265,15 +265,43 @@ function Dashboard() {
               </div>
 
               <div className="border-t border-[#dce8e8] p-5 lg:border-l lg:border-t-0 lg:p-8">
-                <div className="rounded-2xl border border-white bg-white/80 p-5 shadow-[0_14px_35px_rgba(16,42,67,.07)] backdrop-blur">
-                  <div className="flex items-center justify-between">
+                <div className="rounded-2xl border border-white bg-white/85 p-5 shadow-[0_14px_35px_rgba(16,42,67,.07)] backdrop-blur">
+                  <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Conta em foco</p>
-                      <p className="mt-1 font-bold text-[#102a43]">{companyName}</p>
+                      <p className="text-xs font-bold uppercase tracking-[.14em] text-[#0f766e]">Próximas ações</p>
+                      <p className="mt-1 text-sm font-extrabold text-[#102a43]">Avance no que traz resultado.</p>
                     </div>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]">
-                      <Building2 className="h-5 w-5" />
-                    </div>
+                    <Sparkles className="h-5 w-5 text-[#0f766e]" />
+                  </div>
+                  <div className="mt-5 space-y-3">
+                    {companyName === "A sua empresa" && (
+                      <Link to="/dashboard/profile" className="flex items-center gap-3 rounded-xl bg-[#f6f8fb] p-3 transition hover:bg-[#edf7f5]">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[#0f766e]"><Building2 className="h-4 w-4" /></span>
+                        <span className="min-w-0 flex-1"><span className="block text-xs font-bold text-[#102a43]">Completar empresa</span><span className="block text-[11px] text-slate-500">Adicione informação para ganhar confiança.</span></span>
+                        <ArrowRight className="h-4 w-4 text-slate-300" />
+                      </Link>
+                    )}
+                    {!modules.buying_enabled && (
+                      <button onClick={() => activateModule("buying_enabled")} className="flex w-full items-center gap-3 rounded-xl bg-[#f6f8fb] p-3 text-left transition hover:bg-[#edf7f5]">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[#0f766e]"><ShoppingBag className="h-4 w-4" /></span>
+                        <span className="min-w-0 flex-1"><span className="block text-xs font-bold text-[#102a43]">Activar Comprar</span><span className="block text-[11px] text-slate-500">Publique necessidades e receba propostas.</span></span>
+                        <ArrowRight className="h-4 w-4 text-slate-300" />
+                      </button>
+                    )}
+                    {!modules.selling_enabled && (
+                      <button onClick={() => activateModule("selling_enabled")} className="flex w-full items-center gap-3 rounded-xl bg-[#f6f8fb] p-3 text-left transition hover:bg-[#edf7f5]">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[#0f766e]"><Store className="h-4 w-4" /></span>
+                        <span className="min-w-0 flex-1"><span className="block text-xs font-bold text-[#102a43]">Activar Vender</span><span className="block text-[11px] text-slate-500">Encontre oportunidades e responda a pedidos.</span></span>
+                        <ArrowRight className="h-4 w-4 text-slate-300" />
+                      </button>
+                    )}
+                    {companyName !== "A sua empresa" && modules.buying_enabled && modules.selling_enabled && (
+                      <Link to="/requests" className="flex items-center gap-3 rounded-xl bg-[#f6f8fb] p-3 transition hover:bg-[#edf7f5]">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-[#0f766e]"><PackageSearch className="h-4 w-4" /></span>
+                        <span className="min-w-0 flex-1"><span className="block text-xs font-bold text-[#102a43]">Explorar oportunidades</span><span className="block text-[11px] text-slate-500">Procure pedidos onde a sua empresa pode participar.</span></span>
+                        <ArrowRight className="h-4 w-4 text-slate-300" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -293,98 +321,6 @@ function Dashboard() {
               <ActionCard icon={<PackageSearch />} title="Ver oportunidades" text="Explore necessidades publicadas por compradores." to="/requests" />
               <ActionCard icon={<Plus />} title="Publicar necessidade" text="Diga o que procura e encontre fornecedores." to="/requests/new" />
               <ActionCard icon={<FileText />} title="Gerir propostas" text="Acompanhe convites e propostas comerciais." to="/proposals" />
-            </div>
-          </section>
-
-          <section className="mt-7 rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#102a43] text-white">
-                <Search className="h-5 w-5" />
-              </div>
-              <div>
-                <h2 className="font-extrabold text-[#102a43]">Pesquisa rápida</h2>
-                <p className="text-xs text-slate-500">Encontre empresas por actividade, sector ou localização.</p>
-              </div>
-            </div>
-            <div className="mt-5 grid gap-3 md:grid-cols-[1.5fr_1fr_1fr_auto]">
-              <input
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && runSearch()}
-                placeholder="Empresa, serviço ou produto..."
-                className="h-11 rounded-xl border border-slate-200 bg-[#fbfcfd] px-4 text-sm outline-none transition focus:border-[#0f766e] focus:ring-2 focus:ring-[#0f766e]/10"
-              />
-              <select value={searchSector} onChange={(e) => setSearchSector(e.target.value)} className="h-11 rounded-xl border border-slate-200 bg-[#fbfcfd] px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]">
-                <option value="">Todos os sectores</option>
-                <option>Construção e Engenharia</option>
-                <option>Tecnologia e Serviços</option>
-                <option>Consultoria</option>
-                <option>Logística e Transportes</option>
-                <option>Indústria e Fornecimento</option>
-                <option>Energia e Equipamentos</option>
-              </select>
-              <select value={searchProvince} onChange={(e) => setSearchProvince(e.target.value)} className="h-11 rounded-xl border border-slate-200 bg-[#fbfcfd] px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]">
-                <option value="">Todas as províncias</option>
-                <option>Maputo</option>
-                <option>Maputo Cidade</option>
-                <option>Gaza</option>
-                <option>Inhambane</option>
-                <option>Manica</option>
-                <option>Nampula</option>
-                <option>Sofala</option>
-                <option>Tete</option>
-                <option>Zambézia</option>
-                <option>Cabo Delgado</option>
-                <option>Niassa</option>
-                <option>Central</option>
-              </select>
-              <button onClick={runSearch} className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#102a43] px-5 text-sm font-bold text-white transition hover:bg-[#163a5f]">
-                Pesquisar <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-          </section>
-
-          <section className="mt-7">
-            <div className="mb-4">
-              <p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Módulos da conta</p>
-              <h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Módulos para comprar e vender.</h2>
-              <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">
-                A sua conta é única. Os módulos <strong>Comprar</strong> e <strong>Vender</strong> activam as funcionalidades necessárias para cada lado da sua actividade comercial.
-              </p>
-            </div>
-            <div className="grid gap-5 lg:grid-cols-2">
-              <ModuleCard icon={<ShoppingBag />} title="Comprar" description="Transforme necessidades da sua empresa em pedidos estruturados e encontre fornecedores compatíveis." enabled={modules.buying_enabled} onActivate={() => activateModule("buying_enabled")} href="/requests/new" cta={modules.buying_enabled ? "Abrir módulo Comprar" : "Activar Comprar"} tone="teal" features={["Publicar necessidades", "Definir critérios e localização", "Receber e comparar propostas"]} />
-              <ModuleCard icon={<Store />} title="Vender" description="Encontre oportunidades relevantes, apresente a sua empresa e responda com propostas comerciais." enabled={modules.selling_enabled} onActivate={() => activateModule("selling_enabled")} href="/requests" cta={modules.selling_enabled ? "Abrir módulo Vender" : "Activar Vender"} tone="navy" features={["Encontrar oportunidades", "Apresentar propostas", "Criar novas relações comerciais"]} />
-            </div>
-          </section>
-
-          <section className="mt-7">
-            <div className="mb-4 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Módulos adicionais</p>
-                <h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Estruture a sua operação comercial.</h2>
-                <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">Funcionalidades opcionais para elevar a qualidade das oportunidades e controlar quem recebe convites.</p>
-              </div>
-              <Link to="/plans" className="hidden items-center gap-1 text-xs font-bold text-[#0b5f59] sm:inline-flex">Ver planos <ArrowRight className="h-3.5 w-3.5" /></Link>
-            </div>
-            <div className="grid gap-4 lg:grid-cols-2">
-              <AddonCard icon={<BadgeCheck />} title="Qualificação avançada" description="Adicione critérios de experiência, projectos, certificações e verificação aos seus pedidos." enabled={modules.advanced_qualification_enabled} onActivate={() => activateModule("advanced_qualification_enabled")} href="/requests/new" cta={modules.advanced_qualification_enabled ? "Configurar qualificação" : "Activar qualificação"} features={["Critérios de experiência", "Projectos concluídos", "Certificações e verificação"]} />
-              <AddonCard icon={<UserPlus />} title="Convites a fornecedores" description="Convide empresas específicas para participar em oportunidades e mantenha maior controlo sobre a participação." enabled={modules.supplier_invites_enabled} onActivate={() => activateModule("supplier_invites_enabled")} href="/requests/new" cta={modules.supplier_invites_enabled ? "Gerir convites" : "Activar convites"} features={["Seleccionar fornecedores", "Convites direccionados", "Acompanhar respostas"]} />
-            </div>
-          </section>
-
-          <section className="mt-7 rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[.15em] text-[#0f766e]">Estado da empresa</p>
-                <h2 className="mt-1 text-lg font-extrabold text-[#102a43]">Mantenha a sua presença comercial pronta.</h2>
-              </div>
-              <Link to="/dashboard/profile" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-[#102a43]">Gerir empresa <ArrowRight className="h-4 w-4" /></Link>
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
-              <StatusPill label="Empresa" value={companyName === "A sua empresa" ? "Por completar" : "Perfil criado"} />
-              <StatusPill label="Verificação" value={companyVerification === "verified" ? "Verificada" : companyVerification === "pending" ? "Em análise" : "Por verificar"} />
-              <StatusPill label="Documentação" value="Consultar documentos" />
             </div>
           </section>
 
@@ -528,18 +464,3 @@ function AddonCard({
     </div>
   );
 }
-
-function StatusPill({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-xl border border-slate-100 bg-[#f8fafc] p-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</p><p className="mt-1 text-sm font-extrabold text-[#102a43]">{value}</p></div>;
-}
-
-function Metric({ label, value, icon, detail }: { label: string; value: string; icon: ReactNode; detail: string }) {
-  return (
-    <div className="rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm">
-      <div className="flex items-center justify-between"><span className="text-xs font-bold uppercase tracking-wide text-slate-400">{label}</span><span className="text-[#0f766e]">{icon}</span></div>
-      <p className="mt-3 text-2xl font-extrabold tracking-tight text-[#102a43]">{value}</p>
-      <p className="mt-1 text-xs text-slate-500">{detail}</p>
-    </div>
-  );
-}
-
