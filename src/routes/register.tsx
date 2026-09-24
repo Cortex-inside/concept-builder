@@ -12,18 +12,21 @@ function Register() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setError("");
     setMessage("");
+    setLoading(true);
     const { data, error: signUpError } = await supabase.auth.signUp({ email, password, options: { data: { company_name: companyName, full_name: fullName, phone } } });
-    if (signUpError) return setError(signUpError.message);
+    if (signUpError) { setLoading(false); return setError(signUpError.message); }
     if (data.session) {
       nav({ to: "/dashboard/profile" });
       return;
     }
+    setLoading(false);
     setMessage("Conta criada. Confirme o email, se solicitado, e depois entre na sua conta.");
   }
 
@@ -38,7 +41,7 @@ function Register() {
       <div className="rounded-2xl border border-[#d9e2ec] bg-[#f4f7fa] p-5"><p className="font-semibold text-[#102a43]">Uma conta, várias oportunidades</p><p className="mt-2 text-sm leading-6 text-slate-600">Comece com uma única conta. Quando precisar de comprar ou vender, ative a respetiva capacidade dentro do painel.</p></div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
       {message && <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{message}</p>}
-      <button className="w-full rounded-xl bg-[#0f766e] py-3.5 font-semibold text-white shadow-sm hover:bg-[#0b5f59]">Criar conta</button>
+      <button disabled={loading} className="w-full rounded-xl bg-[#0f766e] py-3.5 font-semibold text-white shadow-sm hover:bg-[#0b5f59] disabled:cursor-not-allowed disabled:opacity-60">{loading ? "Aguarde..." : "Criar conta"}</button>
     </form>
     <p className="mt-6 text-center text-sm text-slate-600">Já tem conta?{" "}<Link to="/login" className="font-semibold text-[#0b5f59]">Entrar</Link></p>
   </div></main>;
