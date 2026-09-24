@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, MapPin } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { supabase } from "../lib/supabase";
 import { provinces, sectors, type Company } from "../lib/concept-data";
 import { PageHeader, SearchBox } from "../components/app-shell";
@@ -15,6 +16,10 @@ function Directory() {
   const [verified, setVerified] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setQ(params.get("search") ?? "");
+    setSector(params.get("sector") ?? "");
+    setProvince(params.get("province") ?? "");
     supabase.from("companies").select("*").order("name").then(({ data }) => setCompanies((data ?? []) as Company[]));
   }, []);
 
@@ -38,7 +43,7 @@ function Directory() {
     <p className="my-7 text-sm font-semibold text-slate-500">{list.length} empresas encontradas</p>
     <div className="grid gap-4 md:grid-cols-2">
       {list.map(c => <article key={c.id} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex items-center gap-2"><h2 className="text-lg font-bold text-[#102a43]">{c.name}</h2>{c.verified && <CheckCircle2 className="text-[#0f766e]" size={17} />}</div>
+        <div className="flex items-center gap-2"><Link to={`/companies/${c.id}` as never} className="text-lg font-bold text-[#102a43] hover:text-[#0b5f59]">{c.name}</Link>{c.verified && <CheckCircle2 className="text-[#0f766e]" size={17} />}</div>
         <p className="mt-1 flex items-center gap-1 text-xs font-bold uppercase tracking-wide text-[#0f766e]"><MapPin size={13} />{c.sector} · {c.province}</p>
         <p className="mt-4 text-sm leading-6 text-slate-600">{c.description}</p>
         <div className="mt-5 flex flex-wrap gap-2">{c.services.map(s => <span key={s} className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">{s}</span>)}</div>
