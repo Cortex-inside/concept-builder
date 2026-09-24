@@ -8,6 +8,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { I18nProvider } from "../lib/i18n";
+import { AppShell } from "../components/app-shell";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -79,12 +81,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Concept Builder" },
       { name: "description", content: "Marketplace B2B para empresas e fornecedores em Moçambique" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "author", content: "Concept Builder" },
+      { property: "og:title", content: "Concept Builder" },
+      { property: "og:description", content: "Marketplace B2B para empresas e fornecedores em Moçambique" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      
     ],
     links: [
       {
@@ -120,7 +122,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <LanguageProvider><AppShell /></LanguageProvider> breaks all child routes. */}
-      <Outlet />
+      <I18nProvider><AppShell /></I18nProvider>
     </QueryClientProvider>
   );
 }
