@@ -18,6 +18,9 @@ function Dashboard() {
   const [fullName, setFullName] = useState("Utilizador");
   const [companyName, setCompanyName] = useState("A sua empresa");
   const [mobileNav, setMobileNav] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchSector, setSearchSector] = useState("");
+  const [searchProvince, setSearchProvince] = useState("");
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
@@ -120,7 +123,7 @@ function Dashboard() {
 
           <section className="mt-7 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
             <div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]"><Search className="h-5 w-5" /></div><div><h2 className="font-bold text-[#102a43]">Pesquisa rápida</h2><p className="text-xs text-slate-500">Encontre empresas ou oportunidades sem sair do balcão.</p></div></div>
-            <div className="mt-5 grid gap-3 md:grid-cols-[1.5fr_1fr_1fr_auto]"><input placeholder="Empresa, serviço, produto..." className="h-11 rounded-xl border border-slate-200 px-4 text-sm outline-none focus:border-[#0f766e]" /><select className="h-11 rounded-xl border border-slate-200 px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]"><option>Todos os sectores</option><option>Construção e Engenharia</option><option>Tecnologia e Serviços</option><option>Logística e Transportes</option></select><select className="h-11 rounded-xl border border-slate-200 px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]"><option>Todas as províncias</option><option>Maputo</option><option>Maputo Cidade</option><option>Gaza</option><option>Manica</option><option>Nampula</option><option>Sofala</option></select><Link to="/directory" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 text-sm font-bold text-white">Pesquisar <ArrowRight className="h-4 w-4" /></Link></div>
+            <div className="mt-5 grid gap-3 md:grid-cols-[1.5fr_1fr_1fr_auto]"><input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Empresa, serviço, produto..." className="h-11 rounded-xl border border-slate-200 px-4 text-sm outline-none focus:border-[#0f766e]" /><select value={searchSector} onChange={(e) => setSearchSector(e.target.value)} className="h-11 rounded-xl border border-slate-200 px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]"><option value="">Todos os sectores</option><option>Construção e Engenharia</option><option>Tecnologia e Serviços</option><option>Logística e Transportes</option></select><select value={searchProvince} onChange={(e) => setSearchProvince(e.target.value)} className="h-11 rounded-xl border border-slate-200 px-3 text-sm text-slate-600 outline-none focus:border-[#0f766e]"><option value="">Todas as províncias</option><option>Maputo</option><option>Maputo Cidade</option><option>Gaza</option><option>Manica</option><option>Nampula</option><option>Sofala</option></select><Link to="/directory" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-[#0f766e] px-5 text-sm font-bold text-white">Pesquisar <ArrowRight className="h-4 w-4" /></Link></div>
           </section>
 
           <section className="mt-7">
