@@ -339,7 +339,7 @@ function Dashboard() {
                 </div>
                 <p className="mt-4 text-sm font-bold text-[#102a43]">O seu balcão está pronto.</p>
                 <p className="mx-auto mt-1 max-w-md text-sm leading-6 text-slate-500">
-                  Active Comprar e publique a primeira necessidade para começar a gerar oportunidades comerciais.
+                  Escolha Procurar Produtos & Serviços e publique a primeira necessidade para começar a gerar oportunidades comerciais.
                 </p>
                 <Link to="/requests/new" className="mt-4 inline-flex rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white">
                   Criar necessidade
