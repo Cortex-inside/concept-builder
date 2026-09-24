@@ -14,6 +14,7 @@ import { Route as NewRequestRouteImport } from './routes/requests.new'
 import { Route as ProposalsRouteImport } from './routes/proposals'
 import { Route as ProposalRouteImport } from './routes/proposals.$proposalId'
 import { Route as PlansRouteImport } from './routes/plans'
+import { Route as DashboardDocumentsRouteImport } from './routes/dashboard.documents'
 
 const IndexRoute=IndexRouteImport.update({id:'/',path:'/',getParentRoute:()=>rootRouteImport} as any)
 const DirectoryRoute=DirectoryRouteImport.update({id:'/directory',path:'/directory',getParentRoute:()=>rootRouteImport} as any)
@@ -27,6 +28,7 @@ const NewRequestRoute=NewRequestRouteImport.update({id:'/requests/new',path:'/re
 const ProposalsRoute=ProposalsRouteImport.update({id:'/proposals',path:'/proposals',getParentRoute:()=>rootRouteImport} as any)
 const ProposalRoute=ProposalRouteImport.update({id:'/proposals/$proposalId',path:'/proposals/$proposalId',getParentRoute:()=>rootRouteImport} as any)
 const PlansRoute=PlansRouteImport.update({id:'/plans',path:'/plans',getParentRoute:()=>rootRouteImport} as any)
+const DashboardDocumentsRoute=DashboardDocumentsRouteImport.update({id:'/dashboard/documents',path:'/dashboard/documents',getParentRoute:()=>rootRouteImport} as any)
 
 export interface FileRoutesByFullPath {
  '/': typeof IndexRoute
@@ -41,6 +43,7 @@ export interface FileRoutesByFullPath {
  '/proposals': typeof ProposalsRoute
  '/proposals/$proposalId': typeof ProposalRoute
  '/plans': typeof PlansRoute
+ '/dashboard/documents': typeof DashboardDocumentsRoute
 }
 export interface FileRoutesByTo extends FileRoutesByFullPath {}
 export interface FileRoutesById {
