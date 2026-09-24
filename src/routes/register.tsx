@@ -11,14 +11,20 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const nav = useNavigate();
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setError("");
-    const { error: signUpError } = await supabase.auth.signUp({ email, password, options: { data: { company_name: companyName, full_name: fullName, phone } } });
+    setMessage("");
+    const { data, error: signUpError } = await supabase.auth.signUp({ email, password, options: { data: { company_name: companyName, full_name: fullName, phone } } });
     if (signUpError) return setError(signUpError.message);
-    nav({ to: "/dashboard/profile" });
+    if (data.session) {
+      nav({ to: "/dashboard/profile" });
+      return;
+    }
+    setMessage("Conta criada. Confirme o email, se solicitado, e depois entre na sua conta.");
   }
 
   return <main className="mx-auto max-w-2xl px-4 py-12"><div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
@@ -31,6 +37,7 @@ function Register() {
       <label className="field-label">Palavra-passe<input required minLength={8} type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="field" /></label>
       <div className="rounded-2xl border border-[#d9e2ec] bg-[#f4f7fa] p-5"><p className="font-semibold text-[#102a43]">Uma conta, várias oportunidades</p><p className="mt-2 text-sm leading-6 text-slate-600">Comece com uma única conta. Quando precisar de comprar ou vender, ative a respetiva capacidade dentro do painel.</p></div>
       {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {message && <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{message}</p>}
       <button className="w-full rounded-xl bg-[#0f766e] py-3.5 font-semibold text-white shadow-sm hover:bg-[#0b5f59]">Criar conta</button>
     </form>
     <p className="mt-6 text-center text-sm text-slate-600">Já tem conta?{" "}<Link to="/login" className="font-semibold text-[#0b5f59]">Entrar</Link></p>
