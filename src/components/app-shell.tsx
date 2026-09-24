@@ -13,13 +13,32 @@ export function AppShell() {
 
   useEffect(() => {
     let active = true;
-    supabase.auth.getSession().then(({ data }) => {
-      if (active) setSignedIn(Boolean(data.session));
-    });
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (active) setSignedIn(Boolean(session));
-    });
-    return () => { active = false; listener.subscription.unsubscribe(); };
+    // Auth must never prevent public routes from rendering.
+    // On Vercel the Supabase client may be unavailable until deployment
+    // environment variables are configured; treat that as signed-out state.
+    supabase.auth.getSession()
+      .then(({ data }) => {
+        if (active) setSignedIn(Boolean(data.session));
+      })
+      .catch((error) => {
+        console.error("[Auth] Unable to restore session:", error);
+        if (active) setSignedIn(false);
+      });
+
+    let listener: { subscription: { unsubscribe: () => void } } | undefined;
+    try {
+      const result = supabase.auth.onAuthStateChange((_event, session) => {
+        if (active) setSignedIn(Boolean(session));
+      });
+      listener = result.data;
+    } catch (error) {
+      console.error("[Auth] Unable to initialize auth listener:", error);
+    }
+
+    return () => {
+      active = false;
+      listener?.subscription.unsubscribe();
+    };
   }, []);
   const links = [["/directory","nav.directory"],["/requests","home.need.title"],["/proposals","req.proposals"],["/plans","nav.plans"]] as const;
   return <div className="min-h-screen bg-slate-50 text-slate-900">
