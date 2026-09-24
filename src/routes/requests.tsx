@@ -62,8 +62,20 @@ function Requests() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [q, setQ] = useState("");
   const [sector, setSector] = useState("");
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [myCompanyId, setMyCompanyId] = useState<string | null>(null);
+  const [interests, setInterests] = useState<string[]>([]);
+  const [interestError, setInterestError] = useState("");
 
   useEffect(() => {
+    supabase.auth.getUser().then(async ({ data }) => {
+      setCurrentUserId(data.user?.id ?? null);
+      if (!data.user) return;
+      const { data: company } = await supabase.from("companies").select("id").eq("owner_id", data.user.id).maybeSingle();
+      setMyCompanyId(company?.id ?? null);
+      const { data: rows } = await supabase.from("request_interests").select("request_id").eq("supplier_id", company?.id ?? "");
+      setInterests((rows ?? []).map((row) => row.request_id));
+    });
     Promise.all([
       supabase
         .from("requests")
@@ -87,6 +99,13 @@ function Requests() {
       (!sector || request.sector === sector),
   );
 
+  async function expressInterest(requestId: string) {
+    if (!myCompanyId) { setInterestError("Registe a sua empresa para manifestar interesse."); return; }
+    setInterestError("");
+    const { error } = await supabase.from("request_interests").upsert({ request_id: requestId, supplier_id: myCompanyId, status: "interested" }, { onConflict: "request_id,supplier_id" });
+    if (error) setInterestError(error.message); else setInterests((items) => items.includes(requestId) ? items : [...items, requestId]);
+  }
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
       <div className="flex flex-wrap justify-between gap-4">
@@ -94,7 +113,7 @@ function Requests() {
           <p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">Oportunidades</p>
           <h1 className="mt-2 text-3xl font-extrabold text-[#102a43]">Pedidos de empresas</h1>
           <p className="mt-2 max-w-2xl text-slate-600">
-            Necessidades abertas com fornecedores identificados através de regras transparentes de compatibilidade.
+            Necessidades abertas onde empresas compatíveis podem manifestar interesse voluntariamente. Alguns pedidos podem exigir critérios adicionais ou convite.
           </p>
         </div>
         <Link to="/requests/new" className="rounded-xl bg-[#0f766e] px-4 py-2.5 font-bold text-white">
@@ -147,6 +166,10 @@ function Requests() {
                   </div>
 
                   <p className="mt-4 text-sm leading-6 text-slate-600">{request.description}</p>
+                  <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">{request.participation_mode === "open" ? "Participação aberta" : request.participation_mode === "qualified" ? "Participação qualificada" : "Apenas por convite"}</span>
+                    {request.require_verified && <span className="rounded-full bg-[#e8f5f3] px-3 py-1 text-[#0b5f59]">Verificação exigida</span>}
+                  </div>
                 </div>
 
                 <div className="border-t border-slate-100 bg-[#fbfcfd] p-6">
@@ -157,10 +180,9 @@ function Requests() {
                         Correspondência calculada por sector, área de operação, serviços e verificação. Pedidos abertos permitem manifestação voluntária; pedidos qualificados aplicam os critérios definidos pelo comprador.
                       </p>
                     </div>
-                    <Link to="/proposals" className="text-sm font-bold text-[#0b5f59]">
-                      Gerir convites →
-                    </Link>
+                    <div className="flex items-center gap-3">{currentUserId && myCompanyId && request.owner_id !== currentUserId && request.participation_mode !== "invite_only" && <button onClick={() => expressInterest(request.id)} className="rounded-lg bg-[#0f766e] px-3 py-2 text-sm font-bold text-white">{interests.includes(request.id) ? "Interesse manifestado" : "Quero concorrer"}</button>}<Link to="/proposals" className="text-sm font-bold text-[#0b5f59]">Gerir propostas →</Link></div>
                   </div>
+                  {interestError && <p className="mt-3 text-xs text-red-700">{interestError}</p>}
 
                   {matches.length === 0 ? (
                     <div className="mt-4 rounded-xl border border-dashed border-slate-200 bg-white p-5 text-sm text-slate-500">
