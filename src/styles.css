@@ -120,3 +120,67 @@
     @apply text-primary underline-offset-2 hover:underline;
   }
 }
+
+
+/* Concept Builder visual system — professional B2B */
+:root {
+  --cb-navy: #102a43;
+  --cb-navy-2: #163a5f;
+  --cb-teal: #0f766e;
+  --cb-teal-dark: #0b5f59;
+  --cb-teal-soft: #e8f5f3;
+  --cb-gold: #c58a2a;
+  --cb-gold-soft: #fbf4e5;
+  --cb-ink: #172b4d;
+  --cb-muted: #62748a;
+  --cb-line: #d9e2ec;
+  --cb-surface: #ffffff;
+  --cb-bg: #f4f7fa;
+  --background: #f4f7fa;
+  --foreground: #172b4d;
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  --primary-deep: #102a43;
+  --secondary: #e8f5f3;
+  --secondary-foreground: #0b5f59;
+  --muted: #f0f4f8;
+  --muted-foreground: #62748a;
+  --accent: #fbf4e5;
+  --accent-foreground: #765017;
+  --border: #d9e2ec;
+  --input: #cbd5e1;
+  --ring: #0f766e;
+}
+
+html { background: var(--cb-bg); }
+body { background: var(--cb-bg); color: var(--cb-ink); }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button, a { transition: all .18s ease; }
+
+.field {
+  min-height: 44px;
+  border-radius: 10px;
+  border-color: #cbd5e1;
+  background: #fff;
+  color: var(--cb-ink);
+  box-shadow: 0 1px 2px rgba(16,42,67,.04);
+}
+.field:focus {
+  border-color: var(--cb-teal);
+  box-shadow: 0 0 0 3px rgba(15,118,110,.12);
+}
+.field-label { color: var(--cb-ink); }
+.section-title { color: var(--cb-navy); border-color: var(--cb-teal); }
+
+/* Re-map the previous blue utility palette to the new brand. */
+.bg-blue-600 { background-color: var(--cb-teal) !important; }
+.bg-blue-700 { background-color: var(--cb-navy) !important; }
+.bg-blue-50 { background-color: var(--cb-teal-soft) !important; }
+.text-blue-700, .text-blue-600 { color: var(--cb-teal-dark) !important; }
+.text-blue-50 { color: #e8f5f3 !important; }
+.border-blue-300 { border-color: #86cfc7 !important; }
+.hover\\:bg-blue-50:hover { background-color: var(--cb-teal-soft) !important; }
+.hover\\:border-blue-300:hover { border-color: #86cfc7 !important; }
+.bg-gradient-to-br.from-blue-700.via-blue-600.to-cyan-600 {
+  background: linear-gradient(135deg, #102a43 0%, #164e63 48%, #0f766e 100%) !important;
+}
