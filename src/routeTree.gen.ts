@@ -10,6 +10,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProfileRouteImport } from './routes/dashboard.profile'
 import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as RequestDetailRouteImport } from './routes/requests.$requestId'
 import { Route as NewRequestRouteImport } from './routes/requests.new'
 import { Route as ProposalsRouteImport } from './routes/proposals'
 import { Route as ProposalRouteImport } from './routes/proposals.$proposalId'
@@ -24,6 +25,7 @@ const RegisterRoute=RegisterRouteImport.update({id:'/register',path:'/register',
 const DashboardRoute=DashboardRouteImport.update({id:'/dashboard',path:'/dashboard',getParentRoute:()=>rootRouteImport} as any)
 const ProfileRoute=ProfileRouteImport.update({id:'/dashboard/profile',path:'/dashboard/profile',getParentRoute:()=>rootRouteImport} as any)
 const RequestsRoute=RequestsRouteImport.update({id:'/requests',path:'/requests',getParentRoute:()=>rootRouteImport} as any)
+const RequestDetailRoute=RequestDetailRouteImport.update({id:'/requests/$requestId',path:'/requests/$requestId',getParentRoute:()=>rootRouteImport} as any)
 const NewRequestRoute=NewRequestRouteImport.update({id:'/requests/new',path:'/requests/new',getParentRoute:()=>rootRouteImport} as any)
 const ProposalsRoute=ProposalsRouteImport.update({id:'/proposals',path:'/proposals',getParentRoute:()=>rootRouteImport} as any)
 const ProposalRoute=ProposalRouteImport.update({id:'/proposals/$proposalId',path:'/proposals/$proposalId',getParentRoute:()=>rootRouteImport} as any)
@@ -39,6 +41,8 @@ export interface FileRoutesByFullPath {
  '/dashboard': typeof DashboardRoute
  '/dashboard/profile': typeof ProfileRoute
  '/requests': typeof RequestsRoute
+ '/requests/$requestId': typeof RequestDetailRoute
+ '/requests/$requestId': typeof RequestDetailRoute
  '/requests/new': typeof NewRequestRoute
  '/proposals': typeof ProposalsRoute
  '/proposals/$proposalId': typeof ProposalRoute
@@ -79,6 +83,7 @@ export interface RootRouteChildren {
  DashboardRoute: typeof DashboardRoute
  ProfileRoute: typeof ProfileRoute
  RequestsRoute: typeof RequestsRoute
+ RequestDetailRoute: typeof RequestDetailRoute
  NewRequestRoute: typeof NewRequestRoute
  ProposalsRoute: typeof ProposalsRoute
  ProposalRoute: typeof ProposalRoute
@@ -94,6 +99,7 @@ declare module '@tanstack/react-router' { interface FileRoutesByPath {
  '/dashboard': {id:'/dashboard';path:'/dashboard';fullPath:'/dashboard';preLoaderRoute:typeof DashboardRouteImport;parentRoute:typeof rootRouteImport}
  '/dashboard/profile': {id:'/dashboard/profile';path:'/dashboard/profile';fullPath:'/dashboard/profile';preLoaderRoute:typeof ProfileRouteImport;parentRoute:typeof rootRouteImport}
  '/requests': {id:'/requests';path:'/requests';fullPath:'/requests';preLoaderRoute:typeof RequestsRouteImport;parentRoute:typeof rootRouteImport}
+ '/requests/$requestId': {id:'/requests/$requestId';path:'/requests/$requestId';fullPath:'/requests/$requestId';preLoaderRoute:typeof RequestDetailRouteImport;parentRoute:typeof rootRouteImport}
  '/requests/new': {id:'/requests/new';path:'/requests/new';fullPath:'/requests/new';preLoaderRoute:typeof NewRequestRouteImport;parentRoute:typeof rootRouteImport}
  '/proposals': {id:'/proposals';path:'/proposals';fullPath:'/proposals';preLoaderRoute:typeof ProposalsRouteImport;parentRoute:typeof rootRouteImport}
  '/proposals/$proposalId': {id:'/proposals/$proposalId';path:'/proposals/$proposalId';fullPath:'/proposals/$proposalId';preLoaderRoute:typeof ProposalRouteImport;parentRoute:typeof rootRouteImport}
