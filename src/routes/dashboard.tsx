@@ -204,9 +204,9 @@ function Dashboard() {
               <Menu className="h-5 w-5" />
             </button>
             <div className="w-8" />
-            <button className="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm" aria-label="Notificações">
-              <Bell className="h-5 w-5 text-slate-500" />
-            </button>
+            <Link to="/requests" className="rounded-xl border border-slate-200 bg-white p-2.5 shadow-sm" aria-label="Ver oportunidades">
+              <PackageSearch className="h-5 w-5 text-slate-500" />
+            </Link>
           </div>
 
           {mobileNav && (
@@ -224,7 +224,7 @@ function Dashboard() {
                 <nav className="mt-8 space-y-2">
                   <NavItem to="/dashboard" icon={<LayoutDashboard />} label="Balcão" active />
                   <NavItem to="/dashboard/profile" icon={<Building2 />} label="Minha empresa" />
-                  <NavItem to="/requests" icon={<PackageSearch />} label="Oportunidades" />
+                  <NavItem to="/requests" icon={<PackageSearch />} label="Comprar & vender" />
                   <NavItem to="/proposals" icon={<FileText />} label="Propostas" />
                   <NavItem to="/dashboard/documents" icon={<FileCheck2 />} label="Documentação" />
                   <NavItem to="/plans" icon={<Store />} label="Planos" />
@@ -240,9 +240,9 @@ function Dashboard() {
                 <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#102a43] sm:text-[38px]">Bom dia, {firstName}.</h1>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Encontre fornecedores, apresente a sua oferta e transforme necessidades em oportunidades comerciais.</p>
               </div>
-              <Link to="/requests/new" className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5f59]">
-                <Plus className="h-4 w-4" />
-                Criar necessidade
+              <Link to="/directory" className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5f59]">
+                <PackageSearch className="h-4 w-4" />
+                Procurar fornecedores
                 <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
@@ -332,15 +332,6 @@ function Dashboard() {
             </div>
           </section>
 
-          <section className="mt-8 rounded-[24px] border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
-            <div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">Próximos passos</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Continue o trabalho</h2><p className="mt-1 text-sm leading-6 text-slate-500">Sugestões baseadas no estado actual do seu balcão, sem repetir os acessos do menu.</p></div>
-            <div className="mt-5 grid gap-3 lg:grid-cols-3">
-              <NextStepCard icon={<Building2 />} title={companyVerification === "verified" ? "Empresa pronta para negociar" : "Prepare a empresa para negociar"} text={companyVerification === "verified" ? "A verificação já está concluída." : "Mantenha os dados da empresa completos para transmitir confiança aos parceiros."} to="/dashboard/profile" status={companyVerification === "verified" ? "Concluído" : "Recomendado"} />
-              <NextStepCard icon={<Plus />} title={requests.length ? "Continue os seus pedidos" : "Crie a primeira necessidade"} text={requests.length ? "Tem pedidos registados. Reveja o que está em curso e avance." : "Descreva o que procura para começar a encontrar fornecedores compatíveis."} to="/requests/new" status={requests.length ? "Em curso" : "Recomendado"} />
-              <NextStepCard icon={<ShieldCheck />} title={modules.advanced_qualification_enabled ? "Qualificação pronta" : "Considere qualificação avançada"} text={modules.advanced_qualification_enabled ? "Pode usar critérios e processos mais estruturados nas suas oportunidades." : "Útil quando uma compra exige critérios, documentação ou comparação mais rigorosa."} to="/plans?addon=qualification" status={modules.advanced_qualification_enabled ? "Activo" : "Opcional"} />
-            </div>
-          </section>
-
           <section className="mt-7 overflow-hidden rounded-2xl border border-[#dfe6ed] bg-white shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4 sm:px-6">
               <div>
@@ -356,7 +347,7 @@ function Dashboard() {
                 </div>
                 <p className="mt-4 text-sm font-bold text-[#102a43]">O seu balcão está pronto.</p>
                 <p className="mx-auto mt-1 max-w-md text-sm leading-6 text-slate-500">
-                  Escolha Procurar Produtos & Serviços e publique a primeira necessidade para começar a gerar oportunidades comerciais.
+                  Comece por procurar fornecedores ou publique uma necessidade quando já souber exactamente o que a sua empresa procura.
                 </p>
                 <Link to="/requests/new" className="mt-4 inline-flex rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white">
                   Criar necessidade
@@ -486,15 +477,5 @@ function AddonCard({
         </div>
       </div>
     </div>
-  );
-}
-
-function NextStepCard({ icon, title, text, to, status }: { icon: ReactNode; title: string; text: string; to: string; status: string; }) {
-  return (
-    <Link to={to as never} className="group rounded-2xl border border-[#dfe6ed] bg-white p-4 transition hover:border-[#b9ddd8] hover:shadow-sm">
-      <div className="flex items-start justify-between gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]">{icon}</div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-500">{status}</span></div>
-      <h3 className="mt-4 text-sm font-extrabold text-[#102a43]">{title}</h3><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p>
-      <div className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#0b5f59]">Continuar <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" /></div>
-    </Link>
   );
 }
