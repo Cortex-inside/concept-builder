@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Award, BriefcaseBusiness, Building2, Globe2, MapPin, ShieldCheck, Users } from "lucide-react";
+import { Award, BriefcaseBusiness, Building2, Globe2, MapPin, ShieldCheck } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import type { Company } from "../lib/concept-data";
 import {
