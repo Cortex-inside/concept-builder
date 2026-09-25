@@ -105,7 +105,16 @@ function Proposals() {
     }
   }
 
-  useEffect(() => {\n    load();\n  }, []);\n\n  useEffect(() => {\n    if (requestId) {\n      setSelectedRequest(requestId);\n      setSupplierMode(true);\n    }\n  }, [requestId]);
+  useEffect(() => {
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (requestId) {
+      setSelectedRequest(requestId);
+      setSupplierMode(true);
+    }
+  }, [requestId]);
 
   const ownedRequests = useMemo(() => requests.filter((r) => r.owner_id === userId), [requests, userId]);
   const availableForProposal = useMemo(() => requests.filter((r) => r.owner_id !== userId && r.status === "open"), [requests, userId]);
