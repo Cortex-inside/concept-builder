@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
   Bell,
+  Clock3,
   ShieldCheck,
   Sparkles,
   Building2,
@@ -20,6 +21,7 @@ import {
   ShoppingBag,
   Store,
   Users,
+  UserPlus,
   X,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
