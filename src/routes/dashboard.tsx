@@ -236,11 +236,7 @@ function Dashboard() {
                 <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#102a43] sm:text-[38px]">Bom dia, {firstName}.</h1>
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Encontre fornecedores, apresente a sua oferta e transforme necessidades em oportunidades comerciais.</p>
               </div>
-              <Link to="/directory" className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5f59]">
-                <PackageSearch className="h-4 w-4" />
-                Procurar fornecedores
-                <ChevronRight className="h-4 w-4" />
-              </Link>
+
             </div>
 
             <div className="mt-6 rounded-2xl border border-[#dcefeb] bg-[#f6fbfa] p-3 sm:p-4">
