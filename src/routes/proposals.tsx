@@ -49,7 +49,8 @@ function Proposals() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [supplierMode, setSupplierMode] = useState(false);\n  const { requestId } = Route.useSearch();
+  const [supplierMode, setSupplierMode] = useState(false);
+  const { requestId } = Route.useSearch();
 
   async function load() {
     const { data: auth } = await supabase.auth.getUser();
