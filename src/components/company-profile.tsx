@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { CheckCircle2, Globe2, Mail, MapPin, Phone, ShieldCheck, Users, BriefcaseBusiness, Award, Building2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { Company } from "../lib/concept-data";
@@ -126,8 +127,8 @@ export function CompanyProfileSection({
   children,
 }: {
   title: string;
-  icon?: React.ReactNode;
-  children: React.ReactNode;
+  icon?: ReactNode;
+  children: ReactNode;
 }) {
   return (
     <section className="border-t border-slate-200 pt-7">
@@ -163,7 +164,7 @@ export function CompanyProfileStats({ company }: { company: Company }) {
     company.completed_projects != null ? { label: "Projectos concluídos", value: String(company.completed_projects), icon: <BriefcaseBusiness size={16} /> } : null,
     company.employees ? { label: "Dimensão", value: company.employees, icon: <Users size={16} /> } : null,
     safeList(company.certifications).length > 0 ? { label: "Certificações", value: String(company.certifications?.length), icon: <Award size={16} /> } : null,
-  ].filter(Boolean) as { label: string; value: string; icon: React.ReactNode }[];
+  ].filter(Boolean) as { label: string; value: string; icon: ReactNode }[];
 
   if (stats.length === 0) return null;
 
