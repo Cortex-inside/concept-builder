@@ -1,12 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowRight,
-  Bell,
   Clock3,
-  ShieldCheck,
   Sparkles,
   Building2,
-  BadgeCheck,
   LockKeyhole,
   CheckCircle2,
   ChevronRight,
@@ -21,13 +18,12 @@ import {
   ShoppingBag,
   Store,
   Settings,
-  Users,
   UserPlus,
   X,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { supabase } from "../lib/supabase";
-import type { Request } from "../lib/concept-data";
+import { provinces, sectors, type Request } from "../lib/concept-data";
 
 export const Route = createFileRoute("/dashboard")({ component: Dashboard });
 
@@ -175,7 +171,7 @@ function Dashboard() {
             <nav className="space-y-1">
               <NavItem to="/dashboard" icon={<LayoutDashboard />} label="Balcão" active />
               <NavItem to="/dashboard/profile" icon={<Building2 />} label="Minha empresa" />
-              <NavItem to="/requests" icon={<PackageSearch />} label="Comprar & vender" />
+              <NavItem to="/requests" icon={<PackageSearch />} label="Oportunidades" />
               <NavItem to="/proposals" icon={<FileText />} label="Propostas" />
               <NavItem to="/dashboard/documents" icon={<FileCheck2 />} label="Documentação" />
               <NavItem to="/plans" icon={<Store />} label="Planos" />
@@ -260,27 +256,14 @@ function Dashboard() {
                   <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[.14em] text-slate-400">Sector</span>
                   <select value={searchSector} onChange={(event) => setSearchSector(event.target.value)} className="w-full rounded-xl border border-[#d5e5e3] bg-white px-3 py-2.5 text-sm text-[#102a43] outline-none">
                     <option value="">Todos os sectores</option>
-                    <option value="Construção">Construção</option>
-                    <option value="Tecnologia">Tecnologia</option>
-                    <option value="Consultoria">Consultoria</option>
-                    <option value="Logística">Logística</option>
+                    {sectors.map((sector) => <option key={sector} value={sector}>{sector}</option>)}
                   </select>
                 </label>
                 <label className="w-full lg:w-44">
                   <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[.14em] text-slate-400">Província</span>
                   <select value={searchProvince} onChange={(event) => setSearchProvince(event.target.value)} className="w-full rounded-xl border border-[#d5e5e3] bg-white px-3 py-2.5 text-sm text-[#102a43] outline-none">
                     <option value="">Todas as províncias</option>
-                    <option value="Maputo">Maputo</option>
-                    <option value="Maputo Cidade">Maputo Cidade</option>
-                    <option value="Gaza">Gaza</option>
-                    <option value="Inhambane">Inhambane</option>
-                    <option value="Sofala">Sofala</option>
-                    <option value="Manica">Manica</option>
-                    <option value="Tete">Tete</option>
-                    <option value="Zambézia">Zambézia</option>
-                    <option value="Nampula">Nampula</option>
-                    <option value="Cabo Delgado">Cabo Delgado</option>
-                    <option value="Niassa">Niassa</option>
+                    {provinces.map((province) => <option key={province} value={province}>{province}</option>)}
                   </select>
                 </label>
                 <button onClick={runSearch} className="inline-flex h-[42px] items-center justify-center gap-2 rounded-xl bg-[#102a43] px-5 text-sm font-bold text-white transition hover:bg-[#163a5f]">
@@ -294,7 +277,7 @@ function Dashboard() {
               <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pedidos no balcão</p>
                 <p className="mt-1 text-sm font-bold text-[#102a43]">{requests.length === 0 ? "Ainda nenhum" : `${requests.length} registado${requests.length === 1 ? "" : "s"}`}</p>
-                <p className="mt-1 text-xs leading-5 text-slate-500">{requests.length ? "Continue de onde ficou." : "Crie uma necessidade para começar."}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">{requests.length ? "Continue de onde ficou." : "Publique uma necessidade para começar."}</p>
               </div>
               <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comprar</p>
@@ -350,7 +333,7 @@ function Dashboard() {
                   Comece por procurar fornecedores ou publique uma necessidade quando já souber exactamente o que a sua empresa procura.
                 </p>
                 <Link to="/requests/new" className="mt-4 inline-flex rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white">
-                  Criar necessidade
+                  Publicar uma necessidade
                 </Link>
               </div>
             ) : (
