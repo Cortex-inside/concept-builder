@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Building2, CheckCircle2, MapPin, Target } from "lucide-react";
+import { Building2, CheckCircle2, ExternalLink, MapPin, Target } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import type { Company, Request } from "../lib/concept-data";
 
@@ -160,7 +160,7 @@ function Requests() {
                 <div className="p-6">
                   <div className="flex flex-wrap justify-between gap-4">
                     <div>
-                      <h2 className="text-xl font-extrabold text-[#102a43]">{request.title}</h2>
+                      <Link to="/requests/$requestId" params={{ requestId: request.id }} className="group inline-flex items-center gap-2 text-xl font-extrabold text-[#102a43] hover:text-[#0f766e]">{request.title}<ExternalLink className="h-4 w-4 opacity-40 transition group-hover:opacity-100" /></Link>
                       <p className="mt-2 flex items-center gap-2 text-sm text-slate-500">
                         <MapPin size={14} />
                         {request.sector} · {request.province}
@@ -187,7 +187,7 @@ function Requests() {
                         Correspondência calculada por sector, área de operação, serviços e verificação. Pedidos abertos permitem manifestação voluntária; pedidos qualificados aplicam os critérios definidos pelo comprador.
                       </p>
                     </div>
-                    <div className="flex items-center gap-3">{currentUserId && myCompanyId && request.owner_id !== currentUserId && request.participation_mode !== "invite_only" && <button onClick={() => expressInterest(request.id)} className="rounded-lg bg-[#0f766e] px-3 py-2 text-sm font-bold text-white">{interests.includes(request.id) ? "Interesse manifestado" : "Quero concorrer"}</button>}<Link to="/proposals" className="text-sm font-bold text-[#0b5f59]">Gerir propostas →</Link></div>
+                    <div className="flex items-center gap-3">{currentUserId && myCompanyId && request.owner_id !== currentUserId && request.participation_mode !== "invite_only" && <button onClick={() => expressInterest(request.id)} className="rounded-lg bg-[#0f766e] px-3 py-2 text-sm font-bold text-white">{interests.includes(request.id) ? "Interesse manifestado" : "Quero concorrer"}</button>}<Link to="/requests/$requestId" params={{ requestId: request.id }} className="text-sm font-bold text-[#0b5f59]">Ver oportunidade →</Link></div>
                   </div>
                   {interestError && <p className="mt-3 text-xs text-red-700">{interestError}</p>}
 
