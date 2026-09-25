@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Building2, CheckCircle2, Filter, Search } from "lucide-react";
+import { Building2, Filter, Search } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { provinces, sectors, type Company } from "../lib/concept-data";
 import { PageHeader } from "../components/app-shell";
