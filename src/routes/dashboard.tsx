@@ -20,6 +20,7 @@ import {
   Plus,
   ShoppingBag,
   Store,
+  Settings,
   Users,
   UserPlus,
   X,
