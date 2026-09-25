@@ -247,9 +247,9 @@ function Dashboard() {
               </Link>
             </div>
             <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Empresa</p><p className="mt-1 truncate text-sm font-bold text-[#102a43]">{companyName}</p></div>
-              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Verificação</p><p className="mt-1 text-sm font-bold text-[#102a43]">{companyVerification === "verified" ? "Verificada" : companyVerification === "pending" ? "Em análise" : "Por concluir"}</p></div>
-              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Módulos activos</p><p className="mt-1 text-sm font-bold text-[#102a43]">{Number(modules.buying_enabled) + Number(modules.selling_enabled)} de 2</p></div>
+              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Agora</p><p className="mt-1 text-sm font-bold text-[#102a43]">{requests.length ? "Continue os seus pedidos" : "Comece pelo que procura"}</p><p className="mt-1 text-xs leading-5 text-slate-500">{requests.length ? "Há actividade para rever no seu balcão." : "Publique uma necessidade e abra uma conversa comercial."}</p></div>
+              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comprar</p><p className="mt-1 text-sm font-bold text-[#102a43]">{modules.buying_enabled ? "Pronto a procurar" : "Disponível para activar"}</p><p className="mt-1 text-xs leading-5 text-slate-500">Encontre fornecedores e publique necessidades.</p></div>
+              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vender</p><p className="mt-1 text-sm font-bold text-[#102a43]">{modules.selling_enabled ? "Pronto a oferecer" : "Disponível para activar"}</p><p className="mt-1 text-xs leading-5 text-slate-500">Mostre a sua oferta e responda a oportunidades.</p></div>
             </div>
           </header>
 
@@ -259,30 +259,29 @@ function Dashboard() {
               <span className="hidden text-xs text-slate-400 sm:block">Active uma ou as duas, conforme o seu negócio</span>
             </div>
             <div className="grid gap-4 lg:grid-cols-2">
-              <ModuleCard icon={<ShoppingBag className="h-5 w-5" />} title="Procurar Produtos & Serviços" description="Quando precisa de comprar, encontre empresas e fornecedores capazes de responder ao que a sua empresa procura." enabled={modules.buying_enabled} busy={activating === "buying_enabled"} onActivate={() => activateModule("buying_enabled")} href="/directory" cta={modules.buying_enabled ? "Abrir procura" : "Activar procura"} tone="teal" features={["Descobrir fornecedores", "Encontrar produtos e serviços", "Publicar o que procura"]} />
-              <ModuleCard icon={<Store className="h-5 w-5" />} title="Oferecer Produtos & Serviços" description="Quando quer vender, apresente a sua empresa e encontre oportunidades onde os seus produtos e serviços fazem sentido." enabled={modules.selling_enabled} busy={activating === "selling_enabled"} onActivate={() => activateModule("selling_enabled")} href="/requests" cta={modules.selling_enabled ? "Abrir oferta" : "Activar oferta"} tone="navy" features={["Mostrar o que oferece", "Encontrar oportunidades relevantes", "Responder com propostas"]} />
+              <ModuleCard icon={<ShoppingBag className="h-5 w-5" />} title="Procurar Produtos & Serviços" description="Quando precisa de comprar, encontre empresas e fornecedores capazes de responder ao que a sua empresa procura." enabled={modules.buying_enabled} busy={activating === "buying_enabled"} onActivate={() => activateModule("buying_enabled")} href="/directory" cta="Ver mais" tone="teal" features={["Descobrir fornecedores", "Encontrar produtos e serviços", "Publicar o que procura"]} />
+              <ModuleCard icon={<Store className="h-5 w-5" />} title="Oferecer Produtos & Serviços" description="Quando quer vender, apresente a sua empresa e encontre oportunidades onde os seus produtos e serviços fazem sentido." enabled={modules.selling_enabled} busy={activating === "selling_enabled"} onActivate={() => activateModule("selling_enabled")} href="/requests" cta="Ver mais" tone="navy" features={["Mostrar o que oferece", "Encontrar oportunidades relevantes", "Responder com propostas"]} />
             </div>
             {moduleError && <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">{moduleError}</div>}
           </section>
 
           <section className="mt-8 rounded-[24px] border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#c58a2a]">Expanda o balcão</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Add-ons</h2><p className="mt-1 text-sm text-slate-500">Funcionalidades opcionais para processos comerciais mais avançados.</p></div>
-              <Link to="/plans" className="inline-flex items-center gap-2 text-sm font-bold text-[#0b5f59]">Ver todos <ArrowRight className="h-4 w-4" /></Link>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#c58a2a]">Ferramentas opcionais</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Potencie o seu Balcão Virtual</h2><p className="mt-1 max-w-2xl text-sm leading-6 text-slate-500">Add-ons para quando precisar de processos comerciais mais estruturados, critérios de selecção ou maior controlo sobre os participantes.</p></div>
+              <Link to="/plans" className="inline-flex items-center gap-2 text-sm font-bold text-[#0b5f59]">Ver add-ons <ArrowRight className="h-4 w-4" /></Link>
             </div>
-            <div className="mt-5 grid gap-3 lg:grid-cols-2">
-              <AddonCard icon={<Sparkles className="h-5 w-5" />} title="Qualificação avançada" description="Critérios de participação, pedidos estruturados e processos de selecção." enabled={modules.advanced_qualification_enabled} href="/requests/new" cta="Abrir" purchaseHref="/plans?addon=qualification" features={["Critérios", "Pedidos estruturados", "Selecção"]} />
-              <AddonCard icon={<UserPlus className="h-5 w-5" />} title="Convites direccionados" description="Convide fornecedores específicos para oportunidades reservadas." enabled={modules.supplier_invites_enabled} href="/proposals" cta="Abrir" purchaseHref="/plans?addon=supplier-invites" features={["Convites directos", "Acesso controlado", "Participantes"]} />
+            <div className="mt-5 grid gap-4 lg:grid-cols-2">
+              <AddonCard icon={<Sparkles className="h-5 w-5" />} eyebrow="Para processos de compra mais exigentes" title="Qualificação avançada" description="Use quando precisa de avaliar fornecedores com critérios definidos, documentação ou experiência antes de os considerar numa oportunidade." enabled={modules.advanced_qualification_enabled} href="/requests/new" purchaseHref="/plans?addon=qualification" features={["Defina critérios", "Estruture pedidos", "Compare melhor"]} benefit="Mais rigor na selecção de fornecedores." />
+              <AddonCard icon={<UserPlus className="h-5 w-5" />} eyebrow="Para oportunidades com fornecedores específicos" title="Convites direccionados" description="Use quando já sabe com quem quer trabalhar e pretende convidar empresas específicas para participar numa oportunidade." enabled={modules.supplier_invites_enabled} href="/proposals" purchaseHref="/plans?addon=supplier-invites" features={["Escolha convidados", "Controle a participação", "Centralize respostas"]} benefit="Mais controlo sobre quem participa." />
             </div>
           </section>
 
-          <section className="mt-8">
-            <div className="mb-3"><p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">Acções rápidas</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">O que precisa de fazer?</h2></div>
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <ActionCard icon={<Users />} title="Encontrar parceiros" text="Descubra empresas por sector e província." to="/directory" />
-              <ActionCard icon={<PackageSearch />} title="Ver oportunidades" text="Explore necessidades de compradores." to="/requests" />
-              <ActionCard icon={<Plus />} title="Publicar necessidade" text="Diga o que procura e encontre fornecedores." to="/requests/new" />
-              <ActionCard icon={<FileText />} title="Gerir propostas" text="Acompanhe convites e propostas comerciais." to="/proposals" />
+          <section className="mt-8 rounded-[24px] border border-[#dfe6ed] bg-white p-5 shadow-sm sm:p-6">
+            <div><p className="text-xs font-bold uppercase tracking-[.16em] text-[#0f766e]">Próximos passos</p><h2 className="mt-1 text-xl font-extrabold text-[#102a43]">Continue o trabalho</h2><p className="mt-1 text-sm leading-6 text-slate-500">Sugestões baseadas no estado actual do seu balcão, sem repetir os acessos do menu.</p></div>
+            <div className="mt-5 grid gap-3 lg:grid-cols-3">
+              <NextStepCard icon={<Building2 />} title={companyVerification === "verified" ? "Empresa pronta para negociar" : "Prepare a empresa para negociar"} text={companyVerification === "verified" ? "A verificação já está concluída." : "Mantenha os dados da empresa completos para transmitir confiança aos parceiros."} to="/dashboard/profile" status={companyVerification === "verified" ? "Concluído" : "Recomendado"} />
+              <NextStepCard icon={<Plus />} title={requests.length ? "Continue os seus pedidos" : "Crie a primeira necessidade"} text={requests.length ? "Tem pedidos registados. Reveja o que está em curso e avance." : "Descreva o que procura para começar a encontrar fornecedores compatíveis."} to="/requests/new" status={requests.length ? "Em curso" : "Recomendado"} />
+              <NextStepCard icon={<ShieldCheck />} title={modules.advanced_qualification_enabled ? "Qualificação pronta" : "Considere qualificação avançada"} text={modules.advanced_qualification_enabled ? "Pode usar critérios e processos mais estruturados nas suas oportunidades." : "Útil quando uma compra exige critérios, documentação ou comparação mais rigorosa."} to="/plans?addon=qualification" status={modules.advanced_qualification_enabled ? "Activo" : "Opcional"} />
             </div>
           </section>
 
@@ -351,34 +350,6 @@ function NavItem({
   );
 }
 
-function ActionCard({
-  icon,
-  title,
-  text,
-  to,
-}: {
-  icon: ReactNode;
-  title: string;
-  text: string;
-  to: string;
-}) {
-  return (
-    <Link
-      to={to as never}
-      className="group rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#b9ddd8] hover:shadow-md"
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]">
-          {icon}
-        </div>
-        <ArrowRight className="h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-[#0f766e]" />
-      </div>
-      <h3 className="mt-4 text-sm font-extrabold text-[#102a43]">{title}</h3>
-      <p className="mt-1 text-xs leading-5 text-slate-500">{text}</p>
-    </Link>
-  );
-}
-
 function ModuleCard({
   icon, title, description, enabled, busy = false, onActivate, href, cta, tone, features,
 }: {
@@ -436,31 +407,38 @@ function ModuleCard({
 }
 
 function AddonCard({
-  icon, title, description, enabled, href, cta, purchaseHref, features,
+  icon, eyebrow, title, description, enabled, href, purchaseHref, features, benefit,
 }: {
-  icon: ReactNode; title: string; description: string; enabled: boolean; href: string; cta: string; purchaseHref: string; features: string[];
+  icon: ReactNode; eyebrow: string; title: string; description: string; enabled: boolean; href: string; purchaseHref: string; features: string[]; benefit: string;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm transition hover:border-[#b9ddd8] hover:shadow-md sm:p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#f1f4f8] text-[#102a43]">{icon}</div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">{enabled ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> : <LockKeyhole className="h-3.5 w-3.5" />}{enabled ? "Activo" : "Add-on"}</span>
-      </div>
-      <h3 className="mt-5 text-lg font-extrabold text-[#102a43]">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-500">{description}</p>
-      <div className="mt-4 grid gap-2 sm:grid-cols-3">{features.map((feature) => <div key={feature} className="rounded-lg bg-[#f6f8fb] px-3 py-2 text-xs font-semibold text-slate-600">{feature}</div>)}</div>
-      <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
-        {enabled ? (
-          <Link to={href as never} className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white">
-            {cta} <ArrowRight className="h-4 w-4" />
-          </Link>
-        ) : (
-          <Link to={purchaseHref as never} className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white">
-            Comprar add-on <ArrowRight className="h-4 w-4" />
-          </Link>
-        )}
-        <span className="text-xs text-slate-400">{enabled ? "Disponível na sua conta" : "Activação opcional"}</span>
+    <div className="relative overflow-hidden rounded-2xl border border-[#dfe6ed] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[#b9ddd8] hover:shadow-md sm:p-6">
+      <div className="flex items-start gap-4">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#f1f4f8] text-[#102a43]">{icon}</div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div><p className="text-[10px] font-bold uppercase tracking-[.14em] text-[#0f766e]">{eyebrow}</p><h3 className="mt-1 text-lg font-extrabold tracking-tight text-[#102a43]">{title}</h3></div>
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold text-slate-600">{enabled ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> : <LockKeyhole className="h-3.5 w-3.5" />}{enabled ? "Activo" : "Opcional"}</span>
+          </div>
+          <p className="mt-3 text-sm leading-6 text-slate-500">{description}</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3">{features.map((feature) => <div key={feature} className="flex items-center gap-2 rounded-lg bg-[#f6f8fb] px-3 py-2 text-xs font-semibold text-slate-600"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#0f766e]" />{feature}</div>)}</div>
+          <div className="mt-4 rounded-xl border border-[#dcefeb] bg-[#f3faf8] px-3.5 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-[#0f766e]">Benefício principal</p><p className="mt-1 text-xs font-bold text-[#174b47]">{benefit}</p></div>
+          <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
+            <Link to={(enabled ? href : purchaseHref) as never} className="inline-flex items-center gap-2 rounded-xl bg-[#102a43] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#163a5f]">Ver mais <ArrowRight className="h-4 w-4" /></Link>
+            <span className="text-xs text-slate-400">{enabled ? "Já activo na sua conta" : "Opcional · ver condições e compra"}</span>
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+function NextStepCard({ icon, title, text, to, status }: { icon: ReactNode; title: string; text: string; to: string; status: string; }) {
+  return (
+    <Link to={to as never} className="group rounded-2xl border border-[#dfe6ed] bg-white p-4 transition hover:border-[#b9ddd8] hover:shadow-sm">
+      <div className="flex items-start justify-between gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5f3] text-[#0f766e]">{icon}</div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-500">{status}</span></div>
+      <h3 className="mt-4 text-sm font-extrabold text-[#102a43]">{title}</h3><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p>
+      <div className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[#0b5f59]">Continuar <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" /></div>
+    </Link>
   );
 }
