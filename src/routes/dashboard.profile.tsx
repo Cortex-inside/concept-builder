@@ -21,6 +21,10 @@ function Profile() {
   const [entityType, setEntityType] = useState("");
   const [employees, setEmployees] = useState("");
   const [foundedYear, setFoundedYear] = useState("");
+  const [nuit, setNuit] = useState("");
+  const [completedProjects, setCompletedProjects] = useState("");
+  const [experienceSummary, setExperienceSummary] = useState("");
+  const [certifications, setCertifications] = useState("");
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
@@ -55,6 +59,10 @@ function Profile() {
           setEntityType(company.entity_type ?? "");
           setEmployees(company.employees ?? "");
           setFoundedYear(company.founded_year ? String(company.founded_year) : "");
+          setNuit(company.nuit ?? "");
+          setCompletedProjects(company.completed_projects != null ? String(company.completed_projects) : "");
+          setExperienceSummary(company.experience_summary ?? "");
+          setCertifications((company.certifications ?? []).join(", "));
         });
     });
   }, []);
@@ -86,6 +94,10 @@ function Profile() {
       entity_type: entityType.trim() || null,
       employees: employees.trim() || null,
       founded_year: foundedYear ? Number(foundedYear) : null,
+      nuit: nuit.trim() || null,
+      completed_projects: completedProjects ? Number(completedProjects) : null,
+      experience_summary: experienceSummary.trim() || null,
+      certifications: certifications.split(",").map((item) => item.trim()).filter(Boolean),
     };
 
     const result = id
@@ -142,6 +154,16 @@ function Profile() {
             <label className="field-label">WhatsApp<input value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} className="field" /></label>
             <label className="field-label">Email da conta<input type="email" value={email} readOnly className="field bg-slate-50" /></label>
             <label className="field-label">Dimensão<input value={employees} onChange={(event) => setEmployees(event.target.value)} placeholder="Ex.: 11–50 colaboradores" className="field" /></label>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="font-bold text-[#102a43]">Experiência e credenciais</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <label className="field-label">NUIT<input value={nuit} onChange={(event) => setNuit(event.target.value)} placeholder="Número de identificação fiscal" className="field" /></label>
+            <label className="field-label">Projectos concluídos<input type="number" min="0" value={completedProjects} onChange={(event) => setCompletedProjects(event.target.value)} className="field" /></label>
+            <label className="field-label sm:col-span-2">Experiência da empresa<textarea value={experienceSummary} onChange={(event) => setExperienceSummary(event.target.value)} placeholder="Experiência relevante, capacidade operacional, clientes ou tipos de projectos..." className="field min-h-28" /></label>
+            <label className="field-label sm:col-span-2">Certificações e credenciais<input value={certifications} onChange={(event) => setCertifications(event.target.value)} placeholder="Separe por vírgulas" className="field" /></label>
           </div>
         </section>
 
