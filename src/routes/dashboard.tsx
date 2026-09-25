@@ -175,7 +175,7 @@ function Dashboard() {
             <nav className="space-y-1">
               <NavItem to="/dashboard" icon={<LayoutDashboard />} label="Balcão" active />
               <NavItem to="/dashboard/profile" icon={<Building2 />} label="Minha empresa" />
-              <NavItem to="/requests" icon={<PackageSearch />} label="Oportunidades" />
+              <NavItem to="/requests" icon={<PackageSearch />} label="Comprar & vender" />
               <NavItem to="/proposals" icon={<FileText />} label="Propostas" />
               <NavItem to="/dashboard/documents" icon={<FileCheck2 />} label="Documentação" />
               <NavItem to="/plans" icon={<Store />} label="Planos" />
@@ -238,18 +238,74 @@ function Dashboard() {
               <div className="max-w-3xl">
                 <p className="text-xs font-bold uppercase tracking-[.18em] text-[#0f766e]">Balcão Virtual</p>
                 <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[#102a43] sm:text-[38px]">Bom dia, {firstName}.</h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">O seu espaço de negócio para comprar, vender, encontrar parceiros e gerir oportunidades.</p>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Encontre fornecedores, apresente a sua oferta e transforme necessidades em oportunidades comerciais.</p>
               </div>
-              <Link to="/dashboard/profile" className="inline-flex items-center gap-2 rounded-xl border border-[#dce4eb] bg-[#f8fafc] px-4 py-2.5 text-sm font-bold text-[#102a43] transition hover:border-[#b9ddd8]">
-                <Building2 className="h-4 w-4 text-[#0f766e]" />
-                {companyName === "A sua empresa" ? "Completar empresa" : "Minha empresa"}
+              <Link to="/requests/new" className="inline-flex items-center gap-2 rounded-xl bg-[#0f766e] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#0b5f59]">
+                <Plus className="h-4 w-4" />
+                Criar necessidade
                 <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Agora</p><p className="mt-1 text-sm font-bold text-[#102a43]">{requests.length ? "Continue os seus pedidos" : "Comece pelo que procura"}</p><p className="mt-1 text-xs leading-5 text-slate-500">{requests.length ? "Há actividade para rever no seu balcão." : "Publique uma necessidade e abra uma conversa comercial."}</p></div>
-              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comprar</p><p className="mt-1 text-sm font-bold text-[#102a43]">{modules.buying_enabled ? "Pronto a procurar" : "Disponível para activar"}</p><p className="mt-1 text-xs leading-5 text-slate-500">Encontre fornecedores e publique necessidades.</p></div>
-              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3"><p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vender</p><p className="mt-1 text-sm font-bold text-[#102a43]">{modules.selling_enabled ? "Pronto a oferecer" : "Disponível para activar"}</p><p className="mt-1 text-xs leading-5 text-slate-500">Mostre a sua oferta e responda a oportunidades.</p></div>
+
+            <div className="mt-6 rounded-2xl border border-[#dcefeb] bg-[#f6fbfa] p-3 sm:p-4">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-end">
+                <label className="min-w-0 flex-1">
+                  <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[.14em] text-[#0f766e]">Procure no balcão</span>
+                  <div className="flex items-center gap-2 rounded-xl border border-[#d5e5e3] bg-white px-3 py-2.5">
+                    <PackageSearch className="h-4 w-4 shrink-0 text-slate-400" />
+                    <input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") runSearch(); }} placeholder="Produto, serviço ou empresa" className="min-w-0 flex-1 bg-transparent text-sm text-[#102a43] outline-none placeholder:text-slate-400" />
+                  </div>
+                </label>
+                <label className="w-full lg:w-44">
+                  <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[.14em] text-slate-400">Sector</span>
+                  <select value={searchSector} onChange={(event) => setSearchSector(event.target.value)} className="w-full rounded-xl border border-[#d5e5e3] bg-white px-3 py-2.5 text-sm text-[#102a43] outline-none">
+                    <option value="">Todos os sectores</option>
+                    <option value="Construção">Construção</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Consultoria">Consultoria</option>
+                    <option value="Logística">Logística</option>
+                  </select>
+                </label>
+                <label className="w-full lg:w-44">
+                  <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[.14em] text-slate-400">Província</span>
+                  <select value={searchProvince} onChange={(event) => setSearchProvince(event.target.value)} className="w-full rounded-xl border border-[#d5e5e3] bg-white px-3 py-2.5 text-sm text-[#102a43] outline-none">
+                    <option value="">Todas as províncias</option>
+                    <option value="Maputo">Maputo</option>
+                    <option value="Maputo Cidade">Maputo Cidade</option>
+                    <option value="Gaza">Gaza</option>
+                    <option value="Inhambane">Inhambane</option>
+                    <option value="Sofala">Sofala</option>
+                    <option value="Manica">Manica</option>
+                    <option value="Tete">Tete</option>
+                    <option value="Zambézia">Zambézia</option>
+                    <option value="Nampula">Nampula</option>
+                    <option value="Cabo Delgado">Cabo Delgado</option>
+                    <option value="Niassa">Niassa</option>
+                  </select>
+                </label>
+                <button onClick={runSearch} className="inline-flex h-[42px] items-center justify-center gap-2 rounded-xl bg-[#102a43] px-5 text-sm font-bold text-white transition hover:bg-[#163a5f]">
+                  Procurar
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Pedidos no balcão</p>
+                <p className="mt-1 text-sm font-bold text-[#102a43]">{requests.length === 0 ? "Ainda nenhum" : `${requests.length} registado${requests.length === 1 ? "" : "s"}`}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">{requests.length ? "Continue de onde ficou." : "Crie uma necessidade para começar."}</p>
+              </div>
+              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comprar</p>
+                <p className="mt-1 text-sm font-bold text-[#102a43]">{modules.buying_enabled ? "Pronto a procurar" : "Disponível para activar"}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">Fornecedores, produtos e serviços.</p>
+              </div>
+              <div className="rounded-2xl bg-[#f6f8fb] px-4 py-3">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Vender</p>
+                <p className="mt-1 text-sm font-bold text-[#102a43]">{modules.selling_enabled ? "Pronto a oferecer" : "Disponível para activar"}</p>
+                <p className="mt-1 text-xs leading-5 text-slate-500">Oferta, oportunidades e propostas.</p>
+              </div>
             </div>
           </header>
 
