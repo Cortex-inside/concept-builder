@@ -4,7 +4,7 @@ import { CheckCircle2, FileText, Mail, Send, ShieldCheck, XCircle } from "lucide
 import { supabase } from "../lib/supabase";
 import type { Company, Request } from "../lib/concept-data";
 
-export const Route = createFileRoute("/proposals")({ component: Proposals });
+export const Route = createFileRoute("/proposals")({\n  validateSearch: (search: Record<string, unknown>) => ({\n    requestId: typeof search.requestId === "string" ? search.requestId : "",\n  }),\n  component: Proposals,\n});
 
 type Proposal = {
   id: string;
@@ -44,7 +44,7 @@ function Proposals() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [supplierMode, setSupplierMode] = useState(false);
+  const [supplierMode, setSupplierMode] = useState(false);\n  const { requestId } = Route.useSearch();
 
   async function load() {
     const { data: auth } = await supabase.auth.getUser();
@@ -99,7 +99,7 @@ function Proposals() {
     }
   }
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {\n    load();\n  }, []);\n\n  useEffect(() => {\n    if (requestId) {\n      setSelectedRequest(requestId);\n      setSupplierMode(true);\n    }\n  }, [requestId]);
 
   const ownedRequests = useMemo(() => requests.filter((r) => r.owner_id === userId), [requests, userId]);
   const availableForProposal = useMemo(() => requests.filter((r) => r.owner_id !== userId && r.status === "open"), [requests, userId]);
