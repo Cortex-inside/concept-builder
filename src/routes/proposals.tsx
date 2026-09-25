@@ -4,7 +4,12 @@ import { CheckCircle2, FileText, Mail, Send, ShieldCheck, XCircle } from "lucide
 import { supabase } from "../lib/supabase";
 import type { Company, Request } from "../lib/concept-data";
 
-export const Route = createFileRoute("/proposals")({\n  validateSearch: (search: Record<string, unknown>) => ({\n    requestId: typeof search.requestId === "string" ? search.requestId : "",\n  }),\n  component: Proposals,\n});
+export const Route = createFileRoute("/proposals")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    requestId: typeof search.requestId === "string" ? search.requestId : "",
+  }),
+  component: Proposals,
+});
 
 type Proposal = {
   id: string;
